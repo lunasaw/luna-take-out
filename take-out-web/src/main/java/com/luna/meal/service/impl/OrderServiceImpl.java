@@ -3,14 +3,10 @@ package com.luna.meal.service.impl;
 import com.luna.meal.mapper.OrderMapper;
 import com.luna.meal.service.OrderService;
 import com.luna.meal.entity.Order;
-
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
-import java.util.Date;
 import java.util.List;
 
 /**

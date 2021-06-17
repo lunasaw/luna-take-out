@@ -4,13 +4,10 @@ import com.luna.meal.mapper.MealMapper;
 import com.luna.meal.service.MealService;
 import com.luna.meal.entity.Meal;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
-import java.util.Date;
 import java.util.List;
 
 /**
