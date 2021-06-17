@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luna.meal.mapper.OrderMealMapper">
+
+    <resultMap type="com.luna.meal.entity.OrderMeal" id="OrderMealResultMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="orderId" column="order_id" jdbcType="INTEGER"/>
+        <result property="mealId" column="meal_id" jdbcType="INTEGER"/>
+        <result property="mealPrice" column="meal_price" jdbcType="NUMERIC"/>
+        <result property="mealCount" column="meal_count" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="table_field">
+      id, order_id, meal_id, meal_price, meal_count, create_time, modified_time, version      
+    </sql>
+
+    <!--通过Id查询单个-->
+    <select id="getById" resultMap="OrderMealResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="table_field"/>
+        from tb_order_meal
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <!--通过实体不为空的属性作为筛选条件查询列表-->
+    <select id="listByEntity" resultMap="OrderMealResultMap" parameterType="com.luna.meal.entity.OrderMeal">
+        select
+        <include refid="table_field"/>
+        from tb_order_meal
+        <where>
+            <if test="id != null  ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="orderId != null  ">
+                and order_id = #{orderId,jdbcType=INTEGER}
+            </if>
+            <if test="mealId != null  ">
+                and meal_id = #{mealId,jdbcType=INTEGER}
+            </if>
+            <if test="mealPrice != null  ">
+                and meal_price = #{mealPrice,jdbcType=NUMERIC}
+            </if>
+            <if test="mealCount != null  ">
+                and meal_count = #{mealCount,jdbcType=INTEGER}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="version != null  ">
+                and version = #{version,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体不为空的属性作为筛选条件查询单个-->
+    <select id="getByEntity" resultMap="OrderMealResultMap" parameterType="com.luna.meal.entity.OrderMeal">
+        select
+        <include refid="table_field"/>
+        from tb_order_meal
+        <where>
+            <if test="id != null  ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="orderId != null  ">
+                and order_id = #{orderId,jdbcType=INTEGER}
+            </if>
+            <if test="mealId != null  ">
+                and meal_id = #{mealId,jdbcType=INTEGER}
+            </if>
+            <if test="mealPrice != null  ">
+                and meal_price = #{mealPrice,jdbcType=NUMERIC}
+            </if>
+            <if test="mealCount != null  ">
+                and meal_count = #{mealCount,jdbcType=INTEGER}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="version != null  ">
+                and version = #{version,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <!--通过Id列表作为筛选条件查询列表，列表长度不为0-->
+    <select id="listByIds" resultMap="OrderMealResultMap" parameterType="list">
+        select
+        <include refid="table_field"/>
+        from tb_order_meal
+        where id in
+        <foreach item="item" collection="list" separator="," open="(" close=")" index="index">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--新增实体属性不为null的列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.luna.meal.entity.OrderMeal">
+        insert into tb_order_meal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  ">
+                order_id,
+            </if>
+            <if test="mealId != null  ">
+                meal_id,
+            </if>
+            <if test="mealPrice != null  ">
+                meal_price,
+            </if>
+            <if test="mealCount != null  ">
+                meal_count,
+            </if>
+            create_time,
+            modified_time,
+            version,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null  ">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="mealId != null  ">
+                #{mealId,jdbcType=INTEGER},
+            </if>
+            <if test="mealPrice != null  ">
+                #{mealPrice,jdbcType=NUMERIC},
+            </if>
+            <if test="mealCount != null  ">
+                #{mealCount,jdbcType=INTEGER},
+            </if>
+            now(),
+            now(),
+            0,
+        </trim>
+    </insert>
+
+    <!--批量新增所有列，列表长度不能为0，且列表id统一为null或者统一不为null-->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
+        insert into tb_order_meal
+        (
+        order_id
+        ,
+        meal_id
+        ,
+        meal_price
+        ,
+        meal_count
+        ,
+        create_time
+        ,
+        modified_time
+        ,
+        version
+        )
+        values
+        <foreach item="item" collection="list" separator="," open="" close="" index="index">
+            ( #{item.orderId,jdbcType=INTEGER}
+            ,
+            #{item.mealId,jdbcType=INTEGER}
+            ,
+            #{item.mealPrice,jdbcType=NUMERIC}
+            ,
+            #{item.mealCount,jdbcType=INTEGER}
+            ,
+            now() ,
+            now() ,
+            0 ,
+            )
+        </foreach>
+    </insert>
+
+    <!--通过主键修改实体属性不为null的列-->
+    <update id="update" parameterType="com.luna.meal.entity.OrderMeal">
+        update tb_order_meal
+        <set>
+            <if test="orderId != null  ">
+                order_id = #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="mealId != null  ">
+                meal_id = #{mealId,jdbcType=INTEGER},
+            </if>
+            <if test="mealPrice != null  ">
+                meal_price = #{mealPrice,jdbcType=NUMERIC},
+            </if>
+            <if test="mealCount != null  ">
+                meal_count = #{mealCount,jdbcType=INTEGER},
+            </if>
+            modified_time = now(),
+            version = version + 1,
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+        and version = #{version,jdbcType=OTHER}
+    </update>
+
+    <!--通过表字段修改实体属性不为null的列-->
+    <update id="updateByField">
+        update tb_order_meal
+        <set>
+
+            <if test="where.orderId == null and set.orderId != null">
+                order_id = #{set.orderId,jdbcType=INTEGER},
+            </if>
+
+            <if test="where.mealId == null and set.mealId != null">
+                meal_id = #{set.mealId,jdbcType=INTEGER},
+            </if>
+
+            <if test="where.mealPrice == null and set.mealPrice != null">
+                meal_price = #{set.mealPrice,jdbcType=NUMERIC},
+            </if>
+
+            <if test="where.mealCount == null and set.mealCount != null">
+                meal_count = #{set.mealCount,jdbcType=INTEGER},
+            </if>
+
+
+            modified_time = now(),
+
+            version = version + 1,
+        </set>
+        <where>
+            <if test="where.id != null and id != ''">
+                and id = #{where.id,jdbcType=INTEGER}
+            </if>
+            <if test="where.orderId != null and orderId != ''">
+                and order_id = #{where.orderId,jdbcType=INTEGER}
+            </if>
+            <if test="where.mealId != null and mealId != ''">
+                and meal_id = #{where.mealId,jdbcType=INTEGER}
+            </if>
+            <if test="where.mealPrice != null and mealPrice != ''">
+                and meal_price = #{where.mealPrice,jdbcType=NUMERIC}
+            </if>
+            <if test="where.mealCount != null and mealCount != ''">
+                and meal_count = #{where.mealCount,jdbcType=INTEGER}
+            </if>
+            <if test="where.createTime != null and createTime != ''">
+                and create_time = #{where.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="where.modifiedTime != null and modifiedTime != ''">
+                and modified_time = #{where.modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            and version = #{version,jdbcType=OTHER}
+        </where>
+    </update>
+
+    <!--通过主键修改实体列表，列表长度不能为0，注意：当实体属性为null时，对应的列也会别更新为null-->
+    <update id="updateBatch" parameterType="list">
+        update tb_order_meal
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="order_id = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.orderId}
+                </foreach>
+            </trim>
+            <trim prefix="meal_id = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.mealId}
+                </foreach>
+            </trim>
+            <trim prefix="meal_price = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.mealPrice}
+                </foreach>
+            </trim>
+            <trim prefix="meal_count = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.mealCount}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="modified_time = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then now()
+                </foreach>
+            </trim>
+            <trim prefix="version = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} and version = #{item.version} then #{item.version} + 1
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tb_order_meal where id = #{id,jdbcType=INTEGER}
+                                                            and version = #{version,jdbcType=OTHER}
+                        </delete>
+
+    <!--通过实体非空属性删除-->
+    <delete id="deleteByEntity" parameterType="com.luna.meal.entity.OrderMeal">
+        delete from tb_order_meal
+        <where>
+            <if test="orderId != null  ">
+                and order_id = #{orderId,jdbcType=INTEGER}
+            </if>
+            <if test="mealId != null  ">
+                and meal_id = #{mealId,jdbcType=INTEGER}
+            </if>
+            <if test="mealPrice != null  ">
+                and meal_price = #{mealPrice,jdbcType=NUMERIC}
+            </if>
+            <if test="mealCount != null  ">
+                and meal_count = #{mealCount,jdbcType=INTEGER}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            and version = #{version,jdbcType=OTHER}
+        </where>
+    </delete>
+
+    <!--通过主键列表删除，列表长度不能为0-->
+    <delete id="deleteByIds" parameterType="list">
+        delete from tb_order_meal where id in
+        <foreach item="item" collection="list" separator="," open="(" close=")" index="index">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="countAll" resultType="int">
+        select count(id) from tb_order_meal
+    </select>
+
+    <select id="countByEntity" parameterType="com.luna.meal.entity.OrderMeal" resultType="int">
+        select count(id) from tb_order_meal
+        <where>
+            <if test="id != null  ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="orderId != null  ">
+                and order_id = #{orderId,jdbcType=INTEGER}
+            </if>
+            <if test="mealId != null  ">
+                and meal_id = #{mealId,jdbcType=INTEGER}
+            </if>
+            <if test="mealPrice != null  ">
+                and meal_price = #{mealPrice,jdbcType=NUMERIC}
+            </if>
+            <if test="mealCount != null  ">
+                and meal_count = #{mealCount,jdbcType=INTEGER}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="version != null  ">
+                and version = #{version,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+</mapper>

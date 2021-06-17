@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luna.meal.mapper.UserMapper">
+
+    <resultMap type="com.luna.meal.entity.User" id="UserResultMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="facePath" column="face_path" jdbcType="VARCHAR"/>
+        <result property="faceData" column="face_data" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+        <result property="admin" column="admin" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="table_field">
+      id, username, password, real_name, email, phone, address, face_path, face_data, create_time, modified_time, version, admin      
+    </sql>
+
+    <!--通过Id查询单个-->
+    <select id="getById" resultMap="UserResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="table_field"/>
+        from tb_user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <!--通过实体不为空的属性作为筛选条件查询列表-->
+    <select id="listByEntity" resultMap="UserResultMap" parameterType="com.luna.meal.entity.User">
+        select
+        <include refid="table_field"/>
+        from tb_user
+        <where>
+            <if test="id != null  ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="username != null  ">
+                and username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="password != null  ">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="realName != null  ">
+                and real_name = #{realName,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null  ">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null  ">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="address != null  ">
+                and address = #{address,jdbcType=VARCHAR}
+            </if>
+            <if test="facePath != null  ">
+                and face_path = #{facePath,jdbcType=VARCHAR}
+            </if>
+            <if test="faceData != null  ">
+                and face_data = #{faceData,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="version != null  ">
+                and version = #{version,jdbcType=INTEGER}
+            </if>
+            <if test="admin != null  ">
+                and admin = #{admin,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体不为空的属性作为筛选条件查询单个-->
+    <select id="getByEntity" resultMap="UserResultMap" parameterType="com.luna.meal.entity.User">
+        select
+        <include refid="table_field"/>
+        from tb_user
+        <where>
+            <if test="id != null  ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="username != null  ">
+                and username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="password != null  ">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="realName != null  ">
+                and real_name = #{realName,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null  ">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null  ">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="address != null  ">
+                and address = #{address,jdbcType=VARCHAR}
+            </if>
+            <if test="facePath != null  ">
+                and face_path = #{facePath,jdbcType=VARCHAR}
+            </if>
+            <if test="faceData != null  ">
+                and face_data = #{faceData,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="version != null  ">
+                and version = #{version,jdbcType=INTEGER}
+            </if>
+            <if test="admin != null  ">
+                and admin = #{admin,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <!--通过Id列表作为筛选条件查询列表，列表长度不为0-->
+    <select id="listByIds" resultMap="UserResultMap" parameterType="list">
+        select
+        <include refid="table_field"/>
+        from tb_user
+        where id in
+        <foreach item="item" collection="list" separator="," open="(" close=")" index="index">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--新增实体属性不为null的列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.luna.meal.entity.User">
+        insert into tb_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null  ">
+                username,
+            </if>
+            <if test="password != null  ">
+                password,
+            </if>
+            <if test="realName != null  ">
+                real_name,
+            </if>
+            <if test="email != null  ">
+                email,
+            </if>
+            <if test="phone != null  ">
+                phone,
+            </if>
+            <if test="address != null  ">
+                address,
+            </if>
+            <if test="facePath != null  ">
+                face_path,
+            </if>
+            <if test="faceData != null  ">
+                face_data,
+            </if>
+            create_time,
+            modified_time,
+            version,
+            <if test="admin != null  ">
+                admin,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null  ">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null  ">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null  ">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null  ">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null  ">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null  ">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="facePath != null  ">
+                #{facePath,jdbcType=VARCHAR},
+            </if>
+            <if test="faceData != null  ">
+                #{faceData,jdbcType=VARCHAR},
+            </if>
+            now(),
+            now(),
+            0,
+            <if test="admin != null  ">
+                #{admin,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!--批量新增所有列，列表长度不能为0，且列表id统一为null或者统一不为null-->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
+        insert into tb_user
+        (
+        username
+        ,
+        password
+        ,
+        real_name
+        ,
+        email
+        ,
+        phone
+        ,
+        address
+        ,
+        face_path
+        ,
+        face_data
+        ,
+        create_time
+        ,
+        modified_time
+        ,
+        version
+        ,
+        admin
+        )
+        values
+        <foreach item="item" collection="list" separator="," open="" close="" index="index">
+            ( #{item.username,jdbcType=VARCHAR}
+            ,
+            #{item.password,jdbcType=VARCHAR}
+            ,
+            #{item.realName,jdbcType=VARCHAR}
+            ,
+            #{item.email,jdbcType=VARCHAR}
+            ,
+            #{item.phone,jdbcType=VARCHAR}
+            ,
+            #{item.address,jdbcType=VARCHAR}
+            ,
+            #{item.facePath,jdbcType=VARCHAR}
+            ,
+            #{item.faceData,jdbcType=VARCHAR}
+            ,
+            now() ,
+            now() ,
+            0 ,
+            #{item.admin,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <!--通过主键修改实体属性不为null的列-->
+    <update id="update" parameterType="com.luna.meal.entity.User">
+        update tb_user
+        <set>
+            <if test="username != null  ">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null  ">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null  ">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null  ">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null  ">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null  ">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="facePath != null  ">
+                face_path = #{facePath,jdbcType=VARCHAR},
+            </if>
+            <if test="faceData != null  ">
+                face_data = #{faceData,jdbcType=VARCHAR},
+            </if>
+            modified_time = now(),
+            version = version + 1,
+            <if test="admin != null  ">
+                admin = #{admin,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+        and version = #{version,jdbcType=OTHER}
+    </update>
+
+    <!--通过表字段修改实体属性不为null的列-->
+    <update id="updateByField">
+        update tb_user
+        <set>
+
+            <if test="where.username == null and set.username != null">
+                username = #{set.username,jdbcType=VARCHAR},
+            </if>
+
+            <if test="where.password == null and set.password != null">
+                password = #{set.password,jdbcType=VARCHAR},
+            </if>
+
+            <if test="where.realName == null and set.realName != null">
+                real_name = #{set.realName,jdbcType=VARCHAR},
+            </if>
+
+            <if test="where.email == null and set.email != null">
+                email = #{set.email,jdbcType=VARCHAR},
+            </if>
+
+            <if test="where.phone == null and set.phone != null">
+                phone = #{set.phone,jdbcType=VARCHAR},
+            </if>
+
+            <if test="where.address == null and set.address != null">
+                address = #{set.address,jdbcType=VARCHAR},
+            </if>
+
+            <if test="where.facePath == null and set.facePath != null">
+                face_path = #{set.facePath,jdbcType=VARCHAR},
+            </if>
+
+            <if test="where.faceData == null and set.faceData != null">
+                face_data = #{set.faceData,jdbcType=VARCHAR},
+            </if>
+
+
+            modified_time = now(),
+
+            version = version + 1,
+
+            <if test="where.admin == null and set.admin != null">
+                admin = #{set.admin,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            <if test="where.id != null and id != ''">
+                and id = #{where.id,jdbcType=INTEGER}
+            </if>
+            <if test="where.username != null and username != ''">
+                and username = #{where.username,jdbcType=VARCHAR}
+            </if>
+            <if test="where.password != null and password != ''">
+                and password = #{where.password,jdbcType=VARCHAR}
+            </if>
+            <if test="where.realName != null and realName != ''">
+                and real_name = #{where.realName,jdbcType=VARCHAR}
+            </if>
+            <if test="where.email != null and email != ''">
+                and email = #{where.email,jdbcType=VARCHAR}
+            </if>
+            <if test="where.phone != null and phone != ''">
+                and phone = #{where.phone,jdbcType=VARCHAR}
+            </if>
+            <if test="where.address != null and address != ''">
+                and address = #{where.address,jdbcType=VARCHAR}
+            </if>
+            <if test="where.facePath != null and facePath != ''">
+                and face_path = #{where.facePath,jdbcType=VARCHAR}
+            </if>
+            <if test="where.faceData != null and faceData != ''">
+                and face_data = #{where.faceData,jdbcType=VARCHAR}
+            </if>
+            <if test="where.createTime != null and createTime != ''">
+                and create_time = #{where.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="where.modifiedTime != null and modifiedTime != ''">
+                and modified_time = #{where.modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            and version = #{version,jdbcType=OTHER}
+            <if test="where.admin != null and admin != ''">
+                and admin = #{where.admin,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </update>
+
+    <!--通过主键修改实体列表，列表长度不能为0，注意：当实体属性为null时，对应的列也会别更新为null-->
+    <update id="updateBatch" parameterType="list">
+        update tb_user
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="username = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.username}
+                </foreach>
+            </trim>
+            <trim prefix="password = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.password}
+                </foreach>
+            </trim>
+            <trim prefix="real_name = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.realName}
+                </foreach>
+            </trim>
+            <trim prefix="email = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.email}
+                </foreach>
+            </trim>
+            <trim prefix="phone = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.phone}
+                </foreach>
+            </trim>
+            <trim prefix="address = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.address}
+                </foreach>
+            </trim>
+            <trim prefix="face_path = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.facePath}
+                </foreach>
+            </trim>
+            <trim prefix="face_data = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.faceData}
+                </foreach>
+            </trim>
+            <trim prefix="create_time = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="modified_time = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then now()
+                </foreach>
+            </trim>
+            <trim prefix="version = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} and version = #{item.version} then #{item.version} + 1
+                </foreach>
+            </trim>
+            <trim prefix="admin = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.admin}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from tb_user where id = #{id,jdbcType=INTEGER}
+                                                                            and version = #{version,jdbcType=OTHER}
+                            </delete>
+
+    <!--通过实体非空属性删除-->
+    <delete id="deleteByEntity" parameterType="com.luna.meal.entity.User">
+        delete from tb_user
+        <where>
+            <if test="username != null  ">
+                and username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="password != null  ">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="realName != null  ">
+                and real_name = #{realName,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null  ">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null  ">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="address != null  ">
+                and address = #{address,jdbcType=VARCHAR}
+            </if>
+            <if test="facePath != null  ">
+                and face_path = #{facePath,jdbcType=VARCHAR}
+            </if>
+            <if test="faceData != null  ">
+                and face_data = #{faceData,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            and version = #{version,jdbcType=OTHER}
+            <if test="admin != null  ">
+                and admin = #{admin,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </delete>
+
+    <!--通过主键列表删除，列表长度不能为0-->
+    <delete id="deleteByIds" parameterType="list">
+        delete from tb_user where id in
+        <foreach item="item" collection="list" separator="," open="(" close=")" index="index">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="countAll" resultType="int">
+        select count(id) from tb_user
+    </select>
+
+    <select id="countByEntity" parameterType="com.luna.meal.entity.User" resultType="int">
+        select count(id) from tb_user
+        <where>
+            <if test="id != null  ">
+                and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="username != null  ">
+                and username = #{username,jdbcType=VARCHAR}
+            </if>
+            <if test="password != null  ">
+                and password = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="realName != null  ">
+                and real_name = #{realName,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null  ">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phone != null  ">
+                and phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="address != null  ">
+                and address = #{address,jdbcType=VARCHAR}
+            </if>
+            <if test="facePath != null  ">
+                and face_path = #{facePath,jdbcType=VARCHAR}
+            </if>
+            <if test="faceData != null  ">
+                and face_data = #{faceData,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null  ">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifiedTime != null  ">
+                and modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="version != null  ">
+                and version = #{version,jdbcType=INTEGER}
+            </if>
+            <if test="admin != null  ">
+                and admin = #{admin,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>

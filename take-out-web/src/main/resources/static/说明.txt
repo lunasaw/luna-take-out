@@ -1,0 +1,3 @@
+管理员入口页面：adminlogin.html
+用户入口页面：userlogin.html
+建议使用Google Chrome浏览器打开

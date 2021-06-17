@@ -1,0 +1,66 @@
+[
+	{
+		"id": "1",
+		"name": "CSI餐厅小筑外卖网",
+		"icon": null,
+		"url": "",
+		"parentId": "",
+		"childs": [
+			{
+				"id": "11",
+				"name": "菜系管理",
+				"icon": "/xingxing.png",
+				"url": "chinasofti/mealseriesManage/mealseriesManage.html",
+				"parentId": "4",
+				"childs": []
+			},
+			{
+				"id": "12",
+				"name": "餐品管理",
+				"icon": "/xingxing.png",
+				"url": "chinasofti/mealManage/mealManage.html",
+				"parentId": "4",
+				"childs": []
+			},
+			{
+				"id": "13",
+				"name": "订单管理",
+				"icon": "/xingxing.png",
+				"url": "chinasofti/ordersManage/ordersManage.html",
+				"parentId": "4",
+				"childs": []
+			},
+			{
+				"id": "14",
+				"name": "用户管理",
+				"icon": "/xingxing.png",
+				"url": "chinasofti/usersManage/usersManage.html",
+				"parentId": "4",
+				"childs": [
+					{
+						"id": "141",
+						"name": "普通用户",
+						"icon": "",
+						"url": "chinasofti/usersManage/usersManage.html",
+						"parentId": "14",
+						"childs": []
+					
+					},
+					{
+					
+						"id": "142",
+						"name": "管理员",
+						"icon": "",
+						"url": "chinasofti/adminManage/adminManage.html",
+						"parentId": "14",
+						"childs": []
+					
+					}
+				]
+			}
+			
+		
+		]
+	}
+]
+
