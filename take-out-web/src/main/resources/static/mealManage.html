@@ -46,8 +46,6 @@
 											<div class="col-md-8">
 												<input type="hidden" id="SEARCH_SERIES_ID_HIDDEN" name="SEARCH_SERIES_NAME_HIDDEN" value="">
 												<select id="SEARCH_SERIES_ID" name="SEARCH_SERIES_ID">
-								
-												<option value="">所有菜系</option><option value="1">鲁菜</option><option value="2">川菜</option><option value="3">粤菜</option><option value="4">苏菜</option><option value="5">闽菜</option><option value="6">浙菜</option><option value="7">湘菜</option><option value="8">徽菜</option><option value="9">西餐</option><option value="10">西点</option><option value="11">药膳</option><option value="12">私房菜</option></select>
 											</div>
 										</div>
 									</div>
@@ -91,16 +89,49 @@
 													<th style="text-align:center;" class="sorting" rowspan="1" colspan="1">删除</th>
 												</tr>
 											</thead>
-											<tbody id="POST_LIST_TBODY_ID"><tr bgcolor="#FFFFFF">		<td valign="center" align="center" width="30">1		</td>		<td valign="center" align="center" width="30">鲁菜		</td>		<td valign="center" align="center" width="30">锅塌豆腐		</td>		<td valign="center" align="center" width="30">塌豆腐玲珑别致，整齐端庄。		</td>		<td valign="center" align="center" width="30">16		</td>		<td valign="center" align="center" width="30">			<a href="" onclick="meal_edit('10'); return false;">编辑</a> 		</td>		<td valign="center" align="center" width="30">			<a href="" onclick="meal_edit_img('10'); return false;">上传</a> 		</td>		<td valign="center" align="center" width="30">			<a href="" onclick="DELETE_MEAL('10'); return false;">删除</a> 		</td></tr><tr bgcolor="#FFFFFF">		<td valign="center" align="center" width="30">2		</td>		<td valign="center" align="center" width="30">川菜		</td>		<td valign="center" align="center" width="30">回锅肉		</td>		<td valign="center" align="center" width="30">口味独特，色泽红亮，肥而不腻		</td>		<td valign="center" align="center" width="30">25		</td>		<td valign="center" align="center" width="30">			<a href="" onclick="meal_edit('11'); return false;">编辑</a> 		</td>		<td valign="center" align="center" width="30">			<a href="" onclick="meal_edit_img('11'); return false;">上传</a> 		</td>		<td valign="center" align="center" width="30">			<a href="" onclick="DELETE_MEAL('11'); return false;">删除</a> 		</td></tr></tbody>
-											<tfoot></tfoot>
+											<tbody id="POST_LIST_TBODY_ID"></tbody>>
 										</table>
 									</div>
 								</div>
-								
+
 								<div class="row">
 									<div class="col-sm-12 col-md-9 col-md-offset-3">
 										<div class="dataTables_paginate paging_simple_numbers">
-											<ul class="pagination" id="PAGE_ID"><li style="margin-left: 30px">		<div class="dataTables_info" style="margin-top: 6px;margin-left: 100px"><span>1/1 页</span> <span>共2条</span></div></li></ul>
+											<ul class="pagination" id="PAGE_ID">
+												<li style="margin-left: 30px">
+													<button class="btn btn-primary" type="button"
+													        onclick="GOTO_MEAL_HOME_PAGE('0')">首页
+													</button>
+												</li>
+												<li style="margin-left: 30px">
+													<button class="btn btn-primary" id="page_pre_btn" type="button"
+													        onclick="GOTO_MEAL_PREVIOUS_PAGE('0')">前一页
+													</button>
+												</li>
+												<li style="margin-left: 30px">
+													<button class="btn btn-primary" id="page_next_btn" type="button"
+													        onclick="GOTO_MEAL_NEXT_PAGE('2')">后一页
+													</button>
+												</li>
+												<li style="margin-left: 30px">
+													<button class="btn btn-primary" type="button"
+													        onclick="GOTO_MEAL_TAIL_PAGE('2')">末页
+													</button>
+												</li>
+												<li style="margin-left: 30px"><input id="JUMP_INPUT_ID" type="text"
+												                                     style="display:inline;width:80px"
+												                                     size="6">
+													<button
+														class="btn btn-sm btn-outline-primary"
+														onclick="GOTO_MEAL_PAGE();return false;">跳转
+													</button>
+												</li>
+												<li style="margin-left: 30px">
+													<div class="dataTables_info" style="margin-top: 6px;margin-left: 100px">
+														<span><span id="page_num">2</span>/ <span id="page_count">3</span>    页</span>
+														<span>共 <span id="data_count">15</span> 条</span></div>
+												</li>
+											</ul>
 										</div>
 									</div>
 								</div>

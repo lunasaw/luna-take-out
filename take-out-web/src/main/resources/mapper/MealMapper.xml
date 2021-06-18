@@ -4,7 +4,7 @@
 
     <resultMap type="com.luna.meal.entity.Meal" id="MealResultMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
-        <result property="seriseId" column="serise_id" jdbcType="INTEGER"/>
+        <result property="seriesId" column="series_id" jdbcType="INTEGER"/>
         <result property="mealName" column="meal_name" jdbcType="VARCHAR"/>
         <result property="summarize" column="summarize" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
@@ -16,7 +16,7 @@
     </resultMap>
 
     <sql id="table_field">
-      id, serise_id, meal_name, summarize, description, meal_price, image, create_time, modified_time, version      
+      id, series_id, meal_name, summarize, description, meal_price, image, create_time, modified_time, version      
     </sql>
 
     <!--通过Id查询单个-->
@@ -37,8 +37,8 @@
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
             </if>
-            <if test="seriseId != null  ">
-                and serise_id = #{seriseId,jdbcType=INTEGER}
+            <if test="seriesId != null  ">
+                and series_id = #{seriesId,jdbcType=INTEGER}
             </if>
             <if test="mealName != null  and mealName != '' ">
                 and meal_name = #{mealName,jdbcType=VARCHAR}
@@ -76,8 +76,8 @@
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
             </if>
-            <if test="seriseId != null  ">
-                and serise_id = #{seriseId,jdbcType=INTEGER}
+            <if test="seriesId != null  ">
+                and series_id = #{seriesId,jdbcType=INTEGER}
             </if>
             <if test="mealName != null  and mealName != '' ">
                 and meal_name = #{mealName,jdbcType=VARCHAR}
@@ -121,8 +121,8 @@
     <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.luna.meal.entity.Meal">
         insert into tb_meal
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="seriseId != null  ">
-                serise_id,
+            <if test="seriesId != null  ">
+                series_id,
             </if>
             <if test="mealName != null  ">
                 meal_name,
@@ -144,8 +144,8 @@
             version,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="seriseId != null  ">
-                #{seriseId,jdbcType=INTEGER},
+            <if test="seriesId != null  ">
+                #{seriesId,jdbcType=INTEGER},
             </if>
             <if test="mealName != null  ">
                 #{mealName,jdbcType=VARCHAR},
@@ -172,7 +172,7 @@
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
         insert into tb_meal
         (
-        serise_id
+        series_id
         ,
         meal_name
         ,
@@ -192,7 +192,7 @@
         )
         values
         <foreach item="item" collection="list" separator="," open="" close="" index="index">
-            ( #{item.seriseId,jdbcType=INTEGER}
+            ( #{item.seriesId,jdbcType=INTEGER}
             ,
             #{item.mealName,jdbcType=VARCHAR}
             ,
@@ -215,8 +215,8 @@
     <update id="update" parameterType="com.luna.meal.entity.Meal">
         update tb_meal
         <set>
-            <if test="seriseId != null  ">
-                serise_id = #{seriseId,jdbcType=INTEGER},
+            <if test="seriesId != null  ">
+                series_id = #{seriesId,jdbcType=INTEGER},
             </if>
             <if test="mealName != null  ">
                 meal_name = #{mealName,jdbcType=VARCHAR},
@@ -245,8 +245,8 @@
         update tb_meal
         <set>
 
-            <if test="where.seriseId == null and set.seriseId != null">
-                serise_id = #{set.seriseId,jdbcType=INTEGER},
+            <if test="where.seriesId == null and set.seriesId != null">
+                series_id = #{set.seriesId,jdbcType=INTEGER},
             </if>
 
             <if test="where.mealName == null and set.mealName != null">
@@ -278,8 +278,8 @@
             <if test="where.id != null and id != ''">
                 and id = #{where.id,jdbcType=INTEGER}
             </if>
-            <if test="where.seriseId != null and seriseId != ''">
-                and serise_id = #{where.seriseId,jdbcType=INTEGER}
+            <if test="where.seriesId != null and seriesId != ''">
+                and series_id = #{where.seriesId,jdbcType=INTEGER}
             </if>
             <if test="where.mealName != null and mealName != ''">
                 and meal_name = #{where.mealName,jdbcType=VARCHAR}
@@ -310,9 +310,9 @@
     <update id="updateBatch" parameterType="list">
         update tb_meal
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="serise_id = case" suffix="end,">
+            <trim prefix="series_id = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when id = #{item.id} then #{item.seriseId}
+                    when id = #{item.id} then #{item.seriesId}
                 </foreach>
             </trim>
             <trim prefix="meal_name = case" suffix="end,">
@@ -371,8 +371,8 @@
     <delete id="deleteByEntity" parameterType="com.luna.meal.entity.Meal">
         delete from tb_meal
         <where>
-            <if test="seriseId != null  ">
-                and serise_id = #{seriseId,jdbcType=INTEGER}
+            <if test="seriesId != null  ">
+                and series_id = #{seriesId,jdbcType=INTEGER}
             </if>
             <if test="mealName != null  ">
                 and meal_name = #{mealName,jdbcType=VARCHAR}
@@ -417,8 +417,8 @@
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
             </if>
-            <if test="seriseId != null  ">
-                and serise_id = #{seriseId,jdbcType=INTEGER}
+            <if test="seriesId != null  ">
+                and series_id = #{seriesId,jdbcType=INTEGER}
             </if>
             <if test="mealName != null  ">
                 and meal_name = #{mealName,jdbcType=VARCHAR}

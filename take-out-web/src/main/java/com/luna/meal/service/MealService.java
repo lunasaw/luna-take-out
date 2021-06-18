@@ -4,12 +4,13 @@ import com.luna.meal.mapper.MealMapper;
 import com.luna.meal.entity.Meal;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.luna.meal.vo.MealVO;
 
 import java.util.List;
 
 /**
  * @Author: luna
- * @CreateTime: 2021-06-17 19:22:00
+ * @CreateTime: 2021-06-18 19:10:25
  */
 public interface MealService {
 
@@ -40,17 +41,17 @@ public interface MealService {
     /**
      * 条件分页查询
      *
-     * @param meal     查询条件
-     * @param page     起始标号
+     * @param meal 查询条件
+     * @param page 起始标号
      * @param pageSize 查询条目
      * @return 对象列表
      */
-    PageInfo<Meal> listPageByEntity(int page, int pageSize, Meal meal);
+    PageInfo<MealVO> listPageByEntity(int page, int pageSize, Meal meal);
 
     /**
      * 条件分页查询
      *
-     * @param page     起始标号
+     * @param page 起始标号
      * @param pageSize 查询条目
      * @return 对象列表
      */

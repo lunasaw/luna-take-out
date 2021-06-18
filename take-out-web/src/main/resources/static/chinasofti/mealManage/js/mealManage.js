@@ -2,26 +2,135 @@ var everyPageDataCount = 7;
 var mealPageIndex = 0;
 var mealAllPage = 0;
 $(document).ready(function () {
-//	KindEditor.options.cssData = 'body {font-family:微软雅黑;}',
-//	editor = KindEditor.create('textarea[id="POST_ADD_DES"]', {
-//		allowUpload : true,
-//	    uploadJson: '/postbar/postController/kindEditorImgInput',
-//	    allowFileManager: false,
-//	    width:'900px',
-//	    height: '300px',
-//	    items: [ 'fullscreen','|','undo', 'redo', '|', 'preview', 'print', 'cut', 'copy', 'paste',
-//	            'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
-//	            'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
-//	            'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
-//	            'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',
-//	             'table', 'hr', 'emoticons', ]
-//	});
 
+    getMealSeries();
+    let mealName = $("#SEARCH_MEAL_NAME").val().trim();
+    let seriesId = $("#SEARCH_SERIES_ID").val();
+    getMealList(mealName, seriesId, 1, everyPageDataCount, true, "meal/api/pageListByEntity");
 
 });
 
-function getMealList(mealName, seriesId, pageIndex, everyPageDataCount, SynOrAsyn, url) {
+function checkResultAndGetData($result) {
+    if ($result.success == false) {
+        throw $result;
+    }
+    return $result.data;
+}
 
+function getMealList(mealName, seriesId, pageStart, pageSize, SynOrAsyn, url) {
+    let meal = {
+        seriesId: seriesId,
+        mealName: mealName,
+    }
+    console.log(meal);
+    $.ajax({
+        url: url + "/" + pageStart + "/" + pageSize, // url where to submit the request
+        type: "GET", // type of action POST || GET
+        data: meal,
+        sync: SynOrAsyn,
+        success: function (result) {
+            // console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                console.log(error)
+                // alert(JSON.stringify(error));
+                $.MsgBox.Alert("消息", "出错了，请于管理员联系");
+                return;
+            }
+
+            console.log(data);
+            if (data == null) {
+                return;
+            }
+
+            // 当前页面开始记录数目
+            $("#data_count_start").text(data.startRow);
+            // 当前页面结束记录数
+            $("#data_count_end").text(data.endRow);
+            // 总页数
+            $("#page_count").text(data.pages);
+            mealAllPage = data.pages;
+            // 总计
+            $("#data_count").text(data.total);
+            // 当前页数
+            $("#page_num").text(data.pageNum);
+            if (data.isFirstPage == true) {
+                $("#page_pre_btn").attr("disabled", "disabled")
+            } else {
+                $("#page_pre_btn").removeAttr("disabled");
+            }
+
+            if (data.isLastPage == true) {
+                $("#page_next_btn").attr("disabled", "disabled")
+            } else {
+                $("#page_next_btn").removeAttr("disabled");
+            }
+
+
+            // 渲染页面
+            let list = data.list;
+            if (list.length > 0) {
+                let content = '';
+                $('#POST_LIST_TBODY_ID').empty();
+                for (let i in list) {
+                    content = content + '<tr bgcolor="#FFFFFF">' +
+                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
+                        '<td valign="center" align="center" width="30"><a href="" onclick="meal_edit(\'' + list[i].id + '\'); return false;">编辑</a> </td>' +
+                        '<td valign="center" align="center" width="30"><a href="" onclick="meal_edit_img(\'' + list[i].id + '\'); return false;">上传</a> </td>' +
+                        '<td valign="center" align="center" width="30"><a href="" onclick="DELETE_MEAL(\'' + list[i].id + '\'); return false;">删除</a> </td>' +
+                        '</tr>'
+                }
+                console.log(content)
+                $('#POST_LIST_TBODY_ID').append(content);
+            } else {
+                $('#POST_LIST_TBODY_ID').empty();
+            }
+        }
+    });
+}
+
+function getMealSeries() {
+    $.ajax({
+        type: "GET",
+        url: "mealSeries/api/list",
+        async: true,
+        contentType: 'application/json;charset=UTF-8',
+        dataType: "json",
+        error: function (XMLHttpRequest, textStatus, text) {
+            $.MsgBox.Alert("消息", "出错了，请于管理员联系");
+        },
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                console.log(error)
+                // alert(JSON.stringify(error));
+                $.MsgBox.Alert("消息", "出错了，请于管理员联系");
+                return;
+            }
+
+            // 渲染页面
+            let list = data;
+            if (list.length > 0) {
+                let content = '<option value="">所有菜系</option>';
+                $('#SEARCH_SERIES_ID').empty();
+                for (let i in list) {
+                    content = content + '<option value="' + list[i].id + '">' + list[i].seriesName + '</option>'
+                }
+                $('#SEARCH_SERIES_ID').append(content);
+            } else {
+                $('#SEARCH_SERIES_ID').empty();
+            }
+        }
+    });
 }
 
 function addMealCheck() {

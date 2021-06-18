@@ -1,4 +1,4 @@
-package com.luna.meal.entity;
+package com.luna.meal.vo;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -9,12 +9,12 @@ import java.io.Serializable;
  * @author luna
  * @since 2021-06-18 19:10:25
  */
-public class Meal implements Serializable {
+public class MealVO implements Serializable {
     private static final long serialVersionUID = -86298736352456537L;
     /** 食物编号 */
     private Long              id;
     /** 菜系编号 */
-    private Long              seriesId;
+    private String            seriesName;
     /** 食物名称 */
     private String            mealName;
     /** 食物摘要 */
@@ -26,9 +26,9 @@ public class Meal implements Serializable {
     /** 物品图片 */
     private String            image;
     /** 创建时间 */
-    private Date              createTime;
+    private String            createTime;
     /** 修改时间 */
-    private Date              modifiedTime;
+    private String            modifiedTime;
     /** 锁 */
     private Integer           version;
 
@@ -40,12 +40,12 @@ public class Meal implements Serializable {
         this.id = id;
     }
 
-    public Long getSeriesId() {
-        return seriesId;
+    public String getSeriesName() {
+        return seriesName;
     }
 
-    public void setSeriesId(Long seriesId) {
-        this.seriesId = seriesId;
+    public void setSeriesName(String seriesName) {
+        this.seriesName = seriesName;
     }
 
     public String getMealName() {
@@ -88,19 +88,19 @@ public class Meal implements Serializable {
         this.image = image;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getModifiedTime() {
+    public String getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
+    public void setModifiedTime(String modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
 
