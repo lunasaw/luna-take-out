@@ -1,13 +1,19 @@
 package com.luna.meal.service.impl;
 
+import com.luna.common.dto.constant.ResultCode;
+import com.luna.meal.constant.UserConstant;
+import com.luna.meal.entity.User;
+import com.luna.meal.exception.UserException;
 import com.luna.meal.mapper.MealSeriesMapper;
 import com.luna.meal.service.MealSeriesService;
 import com.luna.meal.entity.MealSeries;
+import com.luna.meal.tools.UserTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author: luna
@@ -18,6 +24,9 @@ public class MealSeriesServiceImpl implements MealSeriesService {
 
     @Autowired
     private MealSeriesMapper mealSeriesMapper;
+
+    @Autowired
+    private UserTools        userTools;
 
     @Override
     public MealSeries getById(Long id) {
@@ -54,7 +63,11 @@ public class MealSeriesServiceImpl implements MealSeriesService {
     }
 
     @Override
-    public int insert(MealSeries mealSeries) {
+    public int insert(String oneSessionKey, MealSeries mealSeries) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
         return mealSeriesMapper.insert(mealSeries);
     }
 
@@ -64,8 +77,16 @@ public class MealSeriesServiceImpl implements MealSeriesService {
     }
 
     @Override
-    public int update(MealSeries mealSeries) {
-        return mealSeriesMapper.update(mealSeries);
+    public int update(String oneSessionKey, MealSeries mealSeries) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
+
+        MealSeries byId = mealSeriesMapper.getById(mealSeries.getId());
+        byId.setSort(mealSeries.getSort());
+        byId.setSeriesName(mealSeries.getSeriesName());
+        return mealSeriesMapper.update(byId);
     }
 
     @Override
@@ -74,7 +95,11 @@ public class MealSeriesServiceImpl implements MealSeriesService {
     }
 
     @Override
-    public int deleteById(Long id) {
+    public int deleteById(String oneSessionKey, Long id) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
         return mealSeriesMapper.deleteById(id);
     }
 
@@ -84,7 +109,12 @@ public class MealSeriesServiceImpl implements MealSeriesService {
     }
 
     @Override
-    public int deleteByIds(List<Long> list) {
+    public int deleteByIds(String oneSessionKey, List<Long> list) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
+
         return mealSeriesMapper.deleteByIds(list);
     }
 
@@ -99,4 +129,3 @@ public class MealSeriesServiceImpl implements MealSeriesService {
     }
 
 }
-

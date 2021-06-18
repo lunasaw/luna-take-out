@@ -4,6 +4,7 @@
 
     <resultMap type="com.luna.meal.entity.MealSeries" id="MealSeriesResultMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
         <result property="seriesName" column="series_name" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
@@ -11,7 +12,7 @@
     </resultMap>
 
     <sql id="table_field">
-      id, series_name, create_time, modified_time, version      
+      id, sort, series_name, create_time, modified_time, version      
     </sql>
 
     <!--通过Id查询单个-->
@@ -31,6 +32,9 @@
         <where>
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="sort != null  ">
+                and sort = #{sort,jdbcType=INTEGER}
             </if>
             <if test="seriesName != null  and seriesName != '' ">
                 and series_name = #{seriesName,jdbcType=VARCHAR}
@@ -55,6 +59,9 @@
         <where>
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="sort != null  ">
+                and sort = #{sort,jdbcType=INTEGER}
             </if>
             <if test="seriesName != null  and seriesName != '' ">
                 and series_name = #{seriesName,jdbcType=VARCHAR}
@@ -86,6 +93,9 @@
     <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="com.luna.meal.entity.MealSeries">
         insert into tb_meal_series
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sort != null  ">
+                sort,
+            </if>
             <if test="seriesName != null  ">
                 series_name,
             </if>
@@ -94,6 +104,9 @@
             version,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sort != null  ">
+                #{sort,jdbcType=INTEGER},
+            </if>
             <if test="seriesName != null  ">
                 #{seriesName,jdbcType=VARCHAR},
             </if>
@@ -107,6 +120,8 @@
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true" parameterType="list">
         insert into tb_meal_series
         (
+        sort
+        ,
         series_name
         ,
         create_time
@@ -117,7 +132,9 @@
         )
         values
         <foreach item="item" collection="list" separator="," open="" close="" index="index">
-            ( #{item.seriesName,jdbcType=VARCHAR}
+            ( #{item.sort,jdbcType=INTEGER}
+            ,
+            #{item.seriesName,jdbcType=VARCHAR}
             ,
             now() ,
             now() ,
@@ -130,6 +147,9 @@
     <update id="update" parameterType="com.luna.meal.entity.MealSeries">
         update tb_meal_series
         <set>
+            <if test="sort != null  ">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
             <if test="seriesName != null  ">
                 series_name = #{seriesName,jdbcType=VARCHAR},
             </if>
@@ -145,6 +165,10 @@
         update tb_meal_series
         <set>
 
+            <if test="where.sort == null and set.sort != null">
+                sort = #{set.sort,jdbcType=INTEGER},
+            </if>
+
             <if test="where.seriesName == null and set.seriesName != null">
                 series_name = #{set.seriesName,jdbcType=VARCHAR},
             </if>
@@ -157,6 +181,9 @@
         <where>
             <if test="where.id != null and id != ''">
                 and id = #{where.id,jdbcType=INTEGER}
+            </if>
+            <if test="where.sort != null and sort != ''">
+                and sort = #{where.sort,jdbcType=INTEGER}
             </if>
             <if test="where.seriesName != null and seriesName != ''">
                 and series_name = #{where.seriesName,jdbcType=VARCHAR}
@@ -175,6 +202,11 @@
     <update id="updateBatch" parameterType="list">
         update tb_meal_series
         <trim prefix="set" suffixOverrides=",">
+            <trim prefix="sort = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id = #{item.id} then #{item.sort}
+                </foreach>
+            </trim>
             <trim prefix="series_name = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when id = #{item.id} then #{item.seriesName}
@@ -205,13 +237,15 @@
     <!--通过主键删除-->
     <delete id="deleteById" parameterType="java.lang.Long">
         delete from tb_meal_series where id = #{id,jdbcType=INTEGER}
-                                                and version = #{version,jdbcType=OTHER}
-                        </delete>
+    </delete>
 
     <!--通过实体非空属性删除-->
     <delete id="deleteByEntity" parameterType="com.luna.meal.entity.MealSeries">
         delete from tb_meal_series
         <where>
+            <if test="sort != null  ">
+                and sort = #{sort,jdbcType=INTEGER}
+            </if>
             <if test="seriesName != null  ">
                 and series_name = #{seriesName,jdbcType=VARCHAR}
             </if>
@@ -242,6 +276,9 @@
         <where>
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="sort != null  ">
+                and sort = #{sort,jdbcType=INTEGER}
             </if>
             <if test="seriesName != null  ">
                 and series_name = #{seriesName,jdbcType=VARCHAR}

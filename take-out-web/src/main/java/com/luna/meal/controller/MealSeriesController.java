@@ -5,9 +5,11 @@ import com.luna.common.dto.ResultDTO;
 import com.luna.common.dto.ResultDTOUtils;
 import com.luna.meal.entity.MealSeries;
 import com.luna.meal.service.MealSeriesService;
+import com.luna.meal.util.CookieUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -39,21 +41,22 @@ public class MealSeriesController {
     }
 
     @GetMapping("/pageListByEntity/{page}/{size}")
-    public ResultDTO<PageInfo<MealSeries>> listPageByEntity(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size, MealSeries mealSeries) {
+    public ResultDTO<PageInfo<MealSeries>> listPageByEntity(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size, MealSeries mealSeries) {
         PageInfo<MealSeries> pageInfo = mealSeriesService.listPageByEntity(page, size, mealSeries);
         return ResultDTOUtils.success(pageInfo);
     }
 
-
     @GetMapping("/pageList/{page}/{size}")
-    public ResultDTO<PageInfo<MealSeries>> listPage(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size) {
+    public ResultDTO<PageInfo<MealSeries>> listPage(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size) {
         PageInfo<MealSeries> pageInfo = mealSeriesService.listPage(page, size);
         return ResultDTOUtils.success(pageInfo);
     }
 
     @PostMapping("/insert")
-    public ResultDTO<MealSeries> insert(@RequestBody MealSeries mealSeries) {
-        mealSeriesService.insert(mealSeries);
+    public ResultDTO<MealSeries> insert(HttpServletRequest httpServletRequest, @RequestBody MealSeries mealSeries) {
+        mealSeriesService.insert(CookieUtils.getOneSessionKey(httpServletRequest), mealSeries);
         return ResultDTOUtils.success(mealSeries);
     }
 
@@ -64,8 +67,9 @@ public class MealSeriesController {
     }
 
     @PutMapping("/update")
-    public ResultDTO<Boolean> update(@RequestBody MealSeries mealSeries) {
-        return ResultDTOUtils.success(mealSeriesService.update(mealSeries) == 1);
+    public ResultDTO<Boolean> update(HttpServletRequest httpServletRequest, @RequestBody MealSeries mealSeries) {
+        return ResultDTOUtils
+            .success(mealSeriesService.update(CookieUtils.getOneSessionKey(httpServletRequest), mealSeries) == 1);
     }
 
     @PutMapping("/updateBatch")
@@ -74,8 +78,9 @@ public class MealSeriesController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResultDTO<Boolean> deleteOne(@PathVariable(value = "id") Long id) {
-        return ResultDTOUtils.success(mealSeriesService.deleteById(id) == 1);
+    public ResultDTO<Boolean> deleteOne(HttpServletRequest httpServletRequest, @PathVariable(value = "id") Long id) {
+        return ResultDTOUtils
+            .success(mealSeriesService.deleteById(CookieUtils.getOneSessionKey(httpServletRequest), id) == 1);
     }
 
     @DeleteMapping("/deleteByEntity")
@@ -84,10 +89,10 @@ public class MealSeriesController {
     }
 
     @DeleteMapping("/delete")
-    public ResultDTO<Integer> deleteBatch(@RequestBody List<Long> ids) {
+    public ResultDTO<Integer> deleteBatch(HttpServletRequest httpServletRequest, @RequestBody List<Long> ids) {
         int result = 0;
         if (ids != null && ids.size() > 0) {
-            result = mealSeriesService.deleteByIds(ids);
+            result = mealSeriesService.deleteByIds(CookieUtils.getOneSessionKey(httpServletRequest), ids);
         }
         return ResultDTOUtils.success(result);
     }
