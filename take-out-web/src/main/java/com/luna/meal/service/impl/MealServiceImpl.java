@@ -48,7 +48,7 @@ public class MealServiceImpl implements MealService {
         List<Meal> list = mealMapper.listByEntity(meal);
         PageInfo<MealVO> pageInfo = new PageInfo(list);
         List<MealVO> collect = list.stream().map(tempMeal -> {
-            String seriesName = mealSeriesMapper.getById(tempMeal.getId()).getSeriesName();
+            String seriesName = mealSeriesMapper.getById(tempMeal.getSeriesId()).getSeriesName();
             return DO2VOUtils.MealDO2MealVO(tempMeal, seriesName);
         }).collect(Collectors.toList());
         pageInfo.setList(collect);

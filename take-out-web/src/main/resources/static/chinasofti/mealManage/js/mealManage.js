@@ -1,14 +1,17 @@
 var everyPageDataCount = 7;
-var mealPageIndex = 0;
+var mealPageIndex = 1;
 var mealAllPage = 0;
 $(document).ready(function () {
 
     getMealSeries();
+
     let mealName = $("#SEARCH_MEAL_NAME").val().trim();
     let seriesId = $("#SEARCH_SERIES_ID").val();
-    getMealList(mealName, seriesId, 1, everyPageDataCount, true, "meal/api/pageListByEntity");
+    getMealList(mealName, seriesId, mealPageIndex, everyPageDataCount, true, "meal/api/pageListByEntity");
+
 
 });
+
 
 function checkResultAndGetData($result) {
     if ($result.success == false) {
@@ -77,16 +80,15 @@ function getMealList(mealName, seriesId, pageStart, pageSize, SynOrAsyn, url) {
                 for (let i in list) {
                     content = content + '<tr bgcolor="#FFFFFF">' +
                         '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
-                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
-                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
-                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
-                        '<td valign="center" align="center" width="30">' + list[i].id + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].seriesName + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].mealName + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].summarize + '</td>' +
+                        '<td valign="center" align="center" width="30">' + list[i].mealPrice + '</td>' +
                         '<td valign="center" align="center" width="30"><a href="" onclick="meal_edit(\'' + list[i].id + '\'); return false;">编辑</a> </td>' +
                         '<td valign="center" align="center" width="30"><a href="" onclick="meal_edit_img(\'' + list[i].id + '\'); return false;">上传</a> </td>' +
                         '<td valign="center" align="center" width="30"><a href="" onclick="DELETE_MEAL(\'' + list[i].id + '\'); return false;">删除</a> </td>' +
                         '</tr>'
                 }
-                console.log(content)
                 $('#POST_LIST_TBODY_ID').append(content);
             } else {
                 $('#POST_LIST_TBODY_ID').empty();
@@ -121,12 +123,18 @@ function getMealSeries() {
             let list = data;
             if (list.length > 0) {
                 let content = '<option value="">所有菜系</option>';
+                $('#ADD_MEAL_SERIES_NAME').empty();
+                $('#EDIT_MEAL_SERIES_NAME').empty();
                 $('#SEARCH_SERIES_ID').empty();
                 for (let i in list) {
                     content = content + '<option value="' + list[i].id + '">' + list[i].seriesName + '</option>'
                 }
+                $('#ADD_MEAL_SERIES_NAME').append(content);
+                $('#EDIT_MEAL_SERIES_NAME').append(content);
                 $('#SEARCH_SERIES_ID').append(content);
             } else {
+                $('#ADD_MEAL_SERIES_NAME').empty();
+                $('#EDIT_MEAL_SERIES_NAME').empty();
                 $('#SEARCH_SERIES_ID').empty();
             }
         }
@@ -134,11 +142,20 @@ function getMealSeries() {
 }
 
 function addMealCheck() {
-    var mealName = $("#ADD_MEAL_NAME").val().trim();
-    var mealSummarize = $("#ADD_MEAL_SUMMARIZE").val().trim();
-    var mealDescription = $("#ADD_MEAL_DESCRIPTION").val().trim();
-    var mealPrice = $("#ADD_MEAL_PRICE").val().trim();
-    var mealSeriesId = $("#ADD_MEALSERIES_NAME").val().trim();
+    let mealName = $("#ADD_MEAL_NAME").val().trim();
+    let mealSummarize = $("#ADD_MEAL_SUMMARIZE").val().trim();
+    let mealDescription = $("#ADD_MEAL_DESCRIPTION").val().trim();
+    let mealPrice = $("#ADD_MEAL_PRICE").val().trim();
+    let mealSeriesId = $("#ADD_MEAL_SERIES_NAME").val();
+
+    let meal = {
+        mealName: mealName,
+        summarize: mealSummarize,
+        description: mealDescription,
+        mealPrice: mealPrice,
+        seriesId: mealSeriesId,
+    }
+
     if (mealName == "") {
         $("#tishi").html("菜名不能为空");
         return;
@@ -170,16 +187,38 @@ function addMealCheck() {
         return;
     }
 
-    var str = /^(([1-9]\d{0,8})|0)(\.\d{2})?$/;
+    let str = /^(([1-9]\d{0,8})|0)(\.\d{2})?$/;
     if (!str.test(mealPrice)) {
         $("#tishi").html("整数(8位)或保留小数点后两位如：88.10");
         return;
     }
 
-    returnMealList();
-
+    addMeal(meal);
 
 }
+
+function addMeal(meal) {
+    $.ajax({
+        type: "POST",
+        url: "meal/api/insert",
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(meal),
+        // data: serializeFormData($('.form-sign')),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                $.MsgBox.Alert("消息", result.message);
+            }
+            $.MsgBox.Alert("消息", "添加成功");
+            returnMealList();
+        }
+    });
+}
+
 
 function meal_edit_img(mealId) {
 
@@ -194,17 +233,44 @@ function meal_edit(mealId) {
     $("#MEAL_LIST_DIV_ID").attr("style", "display:none;");//隐藏div
     $("#MEAL_EDIT_DIV_ID").attr("style", "display:block;");//隐藏div
 
+    getMealDetail(mealId);
 
+}
+
+function getMealDetail(mealId) {
+    $.ajax({
+        type: "GET",
+        url: "meal/api/get/" + mealId,
+        contentType: 'application/json;charset=UTF-8',
+        // data: serializeFormData($('.form-sign')),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                $.MsgBox.Alert("消息", result.message);
+            }
+            if (result.success) {
+                $("#EDIT_MEAL_NAME").attr("value",data.mealName);
+                $("#EDIT_MEAL_SERIES_NAME").val(data.seriesId);
+                $("#EDIT_MEAL_SUMMARIZE").attr("value",data.summarize);
+                $("#EDIT_MEAL_DESCRIPTION").attr("value",data.description);
+                $("#EDIT_MEAL_PRICE").attr("value",data.mealPrice);
+            }
+        }
+    })
 }
 
 function editMealCheck() {
 
-    var mealId = $("#EDIT_MEAL_HIDDE").val();
-    var mealName = $("#EDIT_MEAL_NAME").val().trim();
-    var mealSummarize = $("#EDIT_MEAL_SUMMARIZE").val().trim();
-    var mealDescription = $("#EDIT_MEAL_DESCRIPTION").val().trim();
-    var mealPrice = $("#EDIT_MEAL_PRICE").val().trim();
-    var mealSeriesId = $("#EDIT_MEALSERIES_NAME").val().trim();
+    let mealId = $("#EDIT_MEAL_HIDDE").val();
+    let mealName = $("#EDIT_MEAL_NAME").val().trim();
+    let mealSummarize = $("#EDIT_MEAL_SUMMARIZE").val().trim();
+    let mealDescription = $("#EDIT_MEAL_DESCRIPTION").val().trim();
+    let mealPrice = $("#EDIT_MEAL_PRICE").val().trim();
+    let mealSeriesId = $("#EDIT_MEALSERIES_NAME").val().trim();
     if (mealName == "") {
         $("#tishi").html("菜名不能为空");
         return;
@@ -248,8 +314,26 @@ function editMealCheck() {
 }
 
 function DELETE_MEAL(mealId) {
-
-
+    $.ajax({
+        type: "DELETE",
+        url: "meal/api/delete/" + mealId,
+        contentType: 'application/json;charset=UTF-8',
+        // data: serializeFormData($('.form-sign')),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                $.MsgBox.Alert("消息", result.message);
+            }
+            $.MsgBox.Alert("消息", "删除成功");
+            let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+            let seriesId = $("#SEARCH_SERIES_ID").val();
+            getMealList(searchNameVal, seriesId, mealPageIndex, everyPageDataCount, true, "meal/api/pageListByEntity");
+        }
+    })
 }
 
 function returnMealList() {
@@ -284,30 +368,59 @@ function ADD_MEAL() {
 
 
 function GOTO_MEAL_NEXT_PAGE() {
-
-
+    let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+    mealPageIndex = mealPageIndex + 1;
+    let seriesId = $("#SEARCH_SERIES_ID").val();
+    getMealList(searchNameVal, seriesId, mealPageIndex, everyPageDataCount, true, "meal/api/pageListByEntity");
 }
 
 function GOTO_MEAL_TAIL_PAGE() {
-
+    let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+    let seriesId = $("#SEARCH_SERIES_ID").val();
+    getMealList(searchNameVal, seriesId, mealAllPage, everyPageDataCount, true, "meal/api/pageListByEntity");
 }
 
 function GOTO_MEAL_PAGE() {
+    let jumpVal = $("#JUMP_INPUT_ID").val().trim();
+    if (jumpVal == "") {
+        $.MsgBox.Alert("消息", "跳转页不能为空");
+        return;
+    }
+    if (!(/^[0-9]+$/.test(jumpVal))) {
+        $.MsgBox.Alert("消息", "页码必须为数字");
+        return;
+    }
+    if (jumpVal <= 0) {
+        $.MsgBox.Alert("消息", "页码必须大于等于1");
+        return;
+    }
+    if (jumpVal > mealAllPage) {
+        $.MsgBox.Alert("消息", "页码超出上限");
+        return;
+    }
+    let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+    let seriesId = $("#SEARCH_SERIES_ID").val();
+    getMealList(searchNameVal, seriesId, jumpVal, everyPageDataCount, true, "meal/api/pageListByEntity");
 
 }
 
-
 function GOTO_MEAL_HOME_PAGE() {
-
+    let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+    let seriesId = $("#SEARCH_SERIES_ID").val();
+    getMealList(searchNameVal, seriesId, 0, everyPageDataCount, true, "meal/api/pageListByEntity");
 }
 
 function GOTO_MEAL_PREVIOUS_PAGE() {
-
-
+    let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+    mealPageIndex = mealPageIndex - 1;
+    let seriesId = $("#SEARCH_SERIES_ID").val();
+    getMealList(searchNameVal, seriesId, mealPageIndex, everyPageDataCount, true, "meal/api/pageListByEntity");
 }
 
 function searchByMealName() {
-
+    let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+    let seriesId = $("#SEARCH_SERIES_ID").val();
+    getMealList(searchNameVal, seriesId, 0, everyPageDataCount, true, "meal/api/pageListByEntity");
 }
 
 
