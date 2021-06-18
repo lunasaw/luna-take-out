@@ -1,8 +1,6 @@
 package com.luna.meal.service;
 
-import com.luna.meal.mapper.UserMapper;
 import com.luna.meal.entity.User;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -67,10 +65,12 @@ public interface UserService {
     /**
      * 插入
      *
+     *
+     * @param oneSessionKey
      * @param user 对象
      * @return 影响行数
      */
-    int insert(User user);
+    int insert(String oneSessionKey, User user);
 
     /**
      * 列表插入
@@ -83,10 +83,12 @@ public interface UserService {
     /**
      * 更新
      *
+     *
+     * @param oneSessionKey
      * @param user 对象
      * @return 影响行数
      */
-    int update(User user);
+    int update(String oneSessionKey, User user);
 
     /**
      * 列表更新
@@ -99,10 +101,12 @@ public interface UserService {
     /**
      * 删除
      *
+     *
+     * @param oneSessionKey
      * @param id 主键
      * @return 影响行数
      */
-    int deleteById(Long id);
+    int deleteById(String oneSessionKey, Long id);
 
     /**
      * 条件删除
@@ -115,10 +119,12 @@ public interface UserService {
     /**
      * 主键列表删除
      *
+     *
+     * @param oneSessionKey
      * @param list 主键列表
      * @return 影响行数
      */
-    int deleteByIds(List<Long> list);
+    int deleteByIds(String oneSessionKey, List<Long> list);
 
     /**
      * 数据条目

@@ -41,7 +41,7 @@
             <if test="orderTime != null  ">
                 and order_time = #{orderTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="orderState != null  ">
+            <if test="orderState != null  and orderState != '' ">
                 and order_state = #{orderState,jdbcType=VARCHAR}
             </if>
             <if test="orderPrice != null  ">
@@ -74,7 +74,7 @@
             <if test="orderTime != null  ">
                 and order_time = #{orderTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="orderState != null  ">
+            <if test="orderState != null  and orderState != '' ">
                 and order_state = #{orderState,jdbcType=VARCHAR}
             </if>
             <if test="orderPrice != null  ">

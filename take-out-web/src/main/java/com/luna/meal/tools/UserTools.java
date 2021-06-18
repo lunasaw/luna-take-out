@@ -23,6 +23,6 @@ public class UserTools {
             throw new UserException(ResultCode.PARAMETER_INVALID, "用户不存在");
         }
 
-        return (User)redisHashUtil.get(UserConstant.SESSION_KEY + ":" + sessionKey, sessionKey);
+        return (User)redisHashUtil.get(UserConstant.SESSION_KEY + sessionKey, sessionKey);
     }
 }

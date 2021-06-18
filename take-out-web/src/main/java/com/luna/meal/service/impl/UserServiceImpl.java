@@ -1,14 +1,20 @@
 package com.luna.meal.service.impl;
 
+import com.luna.common.dto.constant.ResultCode;
+import com.luna.common.encrypt.HashTools;
+import com.luna.meal.constant.UserConstant;
+import com.luna.meal.exception.UserException;
 import com.luna.meal.mapper.UserMapper;
 import com.luna.meal.service.UserService;
 import com.luna.meal.entity.User;
 
+import com.luna.meal.tools.UserTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author: luna
@@ -19,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserTools  userTools;
 
     @Override
     public User getById(Long id) {
@@ -55,7 +64,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int insert(User user) {
+    public int insert(String oneSessionKey, User user) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
+        user.setPassword(HashTools.md5(HashTools.md5(user.getPassword())));
         return userMapper.insert(user);
     }
 
@@ -65,8 +79,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int update(User user) {
-        return userMapper.update(user);
+    public int update(String oneSessionKey, User user) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
+        User mapperById = userMapper.getById(user.getId());
+        if (mapperById == null) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "用户不存在");
+        }
+        mapperById.setUsername(user.getUsername());
+        mapperById.setRealName(user.getRealName());
+        mapperById.setEmail(user.getEmail());
+        mapperById.setPhone(user.getPhone());
+        mapperById.setAddress(user.getAddress());
+        mapperById.setPassword(HashTools.md5(HashTools.md5(user.getPassword())));
+        return userMapper.update(mapperById);
     }
 
     @Override
@@ -75,7 +103,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteById(Long id) {
+    public int deleteById(String oneSessionKey, Long id) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
         return userMapper.deleteById(id);
     }
 
@@ -85,7 +117,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteByIds(List<Long> list) {
+    public int deleteByIds(String oneSessionKey, List<Long> list) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
         return userMapper.deleteByIds(list);
     }
 
@@ -100,4 +136,3 @@ public class UserServiceImpl implements UserService {
     }
 
 }
-
