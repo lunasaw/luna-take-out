@@ -2,16 +2,21 @@ package com.luna.meal.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.luna.meal.entity.MealSeries;
+import com.luna.common.dto.constant.ResultCode;
+import com.luna.meal.constant.UserConstant;
+import com.luna.meal.entity.User;
+import com.luna.meal.exception.UserException;
 import com.luna.meal.mapper.MealMapper;
 import com.luna.meal.mapper.MealSeriesMapper;
 import com.luna.meal.service.MealService;
 import com.luna.meal.entity.Meal;
+import com.luna.meal.tools.UserTools;
 import com.luna.meal.util.DO2VOUtils;
 import com.luna.meal.vo.MealVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +31,9 @@ public class MealServiceImpl implements MealService {
 
     @Autowired
     private MealSeriesMapper mealSeriesMapper;
+
+    @Autowired
+    private UserTools        userTools;
 
     @Override
     public Meal getById(Long id) {
@@ -78,8 +86,18 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public int update(Meal meal) {
-        return mealMapper.update(meal);
+    public int update(String oneSessionKey, Meal meal) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
+        Meal byId = mealMapper.getById(meal.getId());
+        byId.setSeriesId(meal.getSeriesId());
+        byId.setMealName(meal.getMealName());
+        byId.setSummarize(meal.getSummarize());
+        byId.setDescription(meal.getDescription());
+        byId.setMealPrice(meal.getMealPrice());
+        return mealMapper.update(byId);
     }
 
     @Override
@@ -88,7 +106,12 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public int deleteById(Long id) {
+    public int deleteById(String oneSessionKey, Long id) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
+
         return mealMapper.deleteById(id);
     }
 

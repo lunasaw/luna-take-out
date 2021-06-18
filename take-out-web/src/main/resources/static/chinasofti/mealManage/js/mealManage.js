@@ -85,7 +85,7 @@ function getMealList(mealName, seriesId, pageStart, pageSize, SynOrAsyn, url) {
                         '<td valign="center" align="center" width="30">' + list[i].summarize + '</td>' +
                         '<td valign="center" align="center" width="30">' + list[i].mealPrice + '</td>' +
                         '<td valign="center" align="center" width="30"><a href="" onclick="meal_edit(\'' + list[i].id + '\'); return false;">编辑</a> </td>' +
-                        '<td valign="center" align="center" width="30"><a href="" onclick="meal_edit_img(\'' + list[i].id + '\'); return false;">上传</a> </td>' +
+                        '<td valign="center" align="center" width="30"><a href="" onclick="meal_edit_img(\'' + list[i].id + '\',\'' + list[i].image + '\'); return false;">上传</a> </td>' +
                         '<td valign="center" align="center" width="30"><a href="" onclick="DELETE_MEAL(\'' + list[i].id + '\'); return false;">删除</a> </td>' +
                         '</tr>'
                 }
@@ -220,12 +220,12 @@ function addMeal(meal) {
 }
 
 
-function meal_edit_img(mealId) {
+function meal_edit_img(mealId, image) {
 
     $("#MEAL_LIST_DIV_ID").attr("style", "display:none;");//隐藏div
     $("#MEAL_IMG_DIV_ID").attr("style", "display:block;");//隐藏div
-
-
+    $("#mealIdHidd").attr("value", mealId);
+    $("#finalImg").attr("src", image);
 }
 
 function meal_edit(mealId) {
@@ -234,7 +234,30 @@ function meal_edit(mealId) {
     $("#MEAL_EDIT_DIV_ID").attr("style", "display:block;");//隐藏div
 
     getMealDetail(mealId);
+}
 
+function updateMeal(meal) {
+    $.ajax({
+        type: "PUT",
+        url: "meal/api/update",
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(meal),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                $.MsgBox.Alert("消息", result.message);
+            }
+            $.MsgBox.Alert("消息", "更新成功");
+            let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+            let seriesId = $("#SEARCH_SERIES_ID").val();
+            returnMealList();
+            getMealList(searchNameVal, seriesId, mealPageIndex, everyPageDataCount, true, "meal/api/pageListByEntity");
+        }
+    })
 }
 
 function getMealDetail(mealId) {
@@ -253,11 +276,12 @@ function getMealDetail(mealId) {
                 $.MsgBox.Alert("消息", result.message);
             }
             if (result.success) {
-                $("#EDIT_MEAL_NAME").attr("value",data.mealName);
+                $("#EDIT_MEAL_HIDDE").attr("value", data.id);
+                $("#EDIT_MEAL_NAME").attr("value", data.mealName);
                 $("#EDIT_MEAL_SERIES_NAME").val(data.seriesId);
-                $("#EDIT_MEAL_SUMMARIZE").attr("value",data.summarize);
-                $("#EDIT_MEAL_DESCRIPTION").attr("value",data.description);
-                $("#EDIT_MEAL_PRICE").attr("value",data.mealPrice);
+                $("#EDIT_MEAL_SUMMARIZE").attr("value", data.summarize);
+                $("#EDIT_MEAL_DESCRIPTION").attr("value", data.description);
+                $("#EDIT_MEAL_PRICE").attr("value", data.mealPrice);
             }
         }
     })
@@ -270,7 +294,18 @@ function editMealCheck() {
     let mealSummarize = $("#EDIT_MEAL_SUMMARIZE").val().trim();
     let mealDescription = $("#EDIT_MEAL_DESCRIPTION").val().trim();
     let mealPrice = $("#EDIT_MEAL_PRICE").val().trim();
-    let mealSeriesId = $("#EDIT_MEALSERIES_NAME").val().trim();
+    let mealSeriesId = $("#EDIT_MEAL_SERIES_NAME").val().trim();
+
+
+    let meal = {
+        id: mealId,
+        mealName: mealName,
+        summarize: mealSummarize,
+        description: mealDescription,
+        mealPrice: mealPrice,
+        seriesId: mealSeriesId,
+    }
+
     if (mealName == "") {
         $("#tishi").html("菜名不能为空");
         return;
@@ -308,7 +343,7 @@ function editMealCheck() {
         return;
     }
 
-    returnMealList();
+    updateMeal(meal);
 
 
 }
@@ -524,7 +559,7 @@ function closeTailor() {
 }
 
 function subphoto() {
-    var mealId = $("#mealIdHidd").val().trim();
+    let mealId = $("#mealIdHidd").val().trim();
     if (file == "") {
         $.MsgBox.Alert("消息", "请选择头像！");
         return;
@@ -534,9 +569,48 @@ function subphoto() {
         return;
     }
 
-    returnMealList()
-
+    uploadFile(mealId);
 }
 
+function uploadFile(mealId) {
+    let formData = new FormData();
+    let file = $('#chooseImg')[0].files[0];
+    formData.append('file', file);
+    $.ajax(
+        {
+            type: "POST",
+            url: "img/api/upload/meal/" + mealId,
+            data: formData,
+            contentType: false, //禁止设置请求类型
+            processData: false, //禁止jquery对data数据的处理,默认会处理，禁止的原因是,FormData已经帮我们做了处理
+            dataType: "json",
+            error: function (XMLHttpRequest, textStatus, text) {
+                $.MsgBox.Alert("消息", "出错了，请于管理员联系");
+            },
+            success: function (result) {
+                console.log(result);
+                let data;
+                try {
+                    data = checkResultAndGetData(result);
+                } catch (error) {
+                    console.log(error)
+                    // alert(JSON.stringify(error));
+                    $.MsgBox.Alert("消息", "出错了，请于管理员联系");
+                    return;
+                }
+                if (result.success) {
+                    $.MsgBox.Alert("消息", "上传成功");
+                    let searchNameVal = $("#SEARCH_MEAL_NAME").val().trim();
+                    let seriesId = $("#SEARCH_SERIES_ID").val();
+                    returnMealList();
+                    getMealList(searchNameVal, seriesId, mealPageIndex, everyPageDataCount, true, "meal/api/pageListByEntity");
+
+                } else {
+                    $.MsgBox.Alert("消息", "上传失败，请重试");
+                }
+            }
+        }
+    );
+}
 
 

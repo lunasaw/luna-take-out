@@ -5,9 +5,12 @@ import com.luna.common.dto.ResultDTO;
 import com.luna.common.dto.ResultDTOUtils;
 import com.luna.meal.entity.Meal;
 import com.luna.meal.service.MealService;
+import com.luna.meal.util.CookieUtils;
 import com.luna.meal.vo.MealVO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -40,7 +43,7 @@ public class MealController {
 
     @GetMapping("/pageListByEntity/{page}/{size}")
     public ResultDTO<PageInfo<MealVO>> listPageByEntity(@PathVariable(value = "page") int page,
-                                                      @PathVariable(value = "size") int size, Meal meal) {
+        @PathVariable(value = "size") int size, Meal meal) {
         PageInfo<MealVO> pageInfo = mealService.listPageByEntity(page, size, meal);
         return ResultDTOUtils.success(pageInfo);
     }
@@ -65,8 +68,8 @@ public class MealController {
     }
 
     @PutMapping("/update")
-    public ResultDTO<Boolean> update(@RequestBody Meal meal) {
-        return ResultDTOUtils.success(mealService.update(meal) == 1);
+    public ResultDTO<Boolean> update(HttpServletRequest httpServletRequest, @RequestBody Meal meal) {
+        return ResultDTOUtils.success(mealService.update(CookieUtils.getOneSessionKey(httpServletRequest), meal) == 1);
     }
 
     @PutMapping("/updateBatch")
@@ -75,8 +78,9 @@ public class MealController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResultDTO<Boolean> deleteOne(@PathVariable(value = "id") Long id) {
-        return ResultDTOUtils.success(mealService.deleteById(id) == 1);
+    public ResultDTO<Boolean> deleteOne(HttpServletRequest httpServletRequest, @PathVariable(value = "id") Long id) {
+        return ResultDTOUtils
+            .success(mealService.deleteById(CookieUtils.getOneSessionKey(httpServletRequest), id) == 1);
     }
 
     @DeleteMapping("/deleteByEntity")
