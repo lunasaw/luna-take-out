@@ -27,16 +27,50 @@ function subLogin() {
         $.localStorage.set(uk, usrname);
         $.localStorage.set(pk, pwd);
         $.localStorage.set(rk, true);
+        rememberPwd = "no";
     } else {
         $.localStorage.remove(uk);
         $.localStorage.remove(pk);
         $.localStorage.remove(rk);
+        rememberPwd = "off";
     }
 
-    window.location.replace("main.html?menuUserName=" + usrname.trim() + "&admin=0");
-
+    let userReq = {
+        username: usrname,
+        password: pwd,
+        rememberPwd: rememberPwd
+    }
+    login(userReq);
 }
 
+function login(userReq) {
+    $.ajax({
+        type: "POST",
+        url: "user/api/login",
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(userReq),
+        // data: serializeFormData($('.form-sign')),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                $.MsgBox.Alert("登陆失败", result.message);
+                return;
+            }
+            window.location.replace("main.html?menuUserName=" + data.username.trim() + "&admin=" + data.admin);
+        }
+    });
+}
+
+function checkResultAndGetData($result) {
+    if ($result.success == false) {
+        throw $result;
+    }
+    return $result.data;
+}
 
 if (window != top) {
     top.location.href = location.href;

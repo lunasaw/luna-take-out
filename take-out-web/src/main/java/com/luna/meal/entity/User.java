@@ -64,6 +64,17 @@ public class User implements Serializable {
      */
     private String admin;
 
+    public User() {
+    }
+
+    public User(String username) {
+        this.username = username;
+    }
+
+    public User(String username, String admin) {
+        this.username = username;
+        this.admin = admin;
+    }
 
     public Long getId() {
         return id;
