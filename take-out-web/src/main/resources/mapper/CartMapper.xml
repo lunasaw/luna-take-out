@@ -269,8 +269,7 @@
     <!--通过主键删除-->
     <delete id="deleteById" parameterType="java.lang.Long">
         delete from tb_cart where id = #{id,jdbcType=INTEGER}
-                                                        and version = #{version,jdbcType=OTHER}
-                        </delete>
+    </delete>
 
     <!--通过实体非空属性删除-->
     <delete id="deleteByEntity" parameterType="com.luna.meal.entity.Cart">

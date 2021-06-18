@@ -78,9 +78,9 @@ function getUsersList(loginName, pageStart, pageSize, SynOrAsyn, url) {
                         '<td valign="center" align="center" width="30">' + list[i].email + '</td>' +
                         '<td valign="center" align="center" width="30">' + list[i].phone + '</td>' +
                         '<td valign="center" align="center" width="120">' + list[i].address + '</td>' +
-                        '<td valign="center" align="center" width="30"><a href="" onclick="users_edit(' +
+                        '<td valign="center" align="center" width="30"><a href="" onclick="usersEdit(' +
                         '\'' + list[i].id + '\',\'' + list[i].username + '\',\'' + list[i].password + '\',\'' + list[i].realName + '\',\'' + list[i].email + '\',\'' + list[i].phone + '\',\'' + list[i].address + '\');return false;">编辑</a>' +
-                        '           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="users_delete(' + list[i].id + '); return false;">删除</a> </td></tr>'
+                        '           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="usersDelete(' + list[i].id + '); return false;">删除</a> </td></tr>'
                 }
                 $('.user-data').append(content);
             } else {

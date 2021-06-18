@@ -1,6 +1,7 @@
 var everyPageDataCount = 7;
 var usersPageIndex = 0;
 var usersAllPage = 0;
+var usersAllPage = 0;
 $(document).ready(function () {
     let searchNameVal = $("#SEARCH_USER_NAME").val().trim();
 
@@ -20,7 +21,6 @@ function getUsersList(loginName, pageStart, pageSize, SynOrAsyn, url) {
         username: loginName,
         admin: 1,
     }
-    console.log(userInfo)
     $.ajax({
         url: url + "/" + pageStart + "/" + pageSize, // url where to submit the request
         type: "GET", // type of action POST || GET
@@ -49,7 +49,7 @@ function getUsersList(loginName, pageStart, pageSize, SynOrAsyn, url) {
             $("#data_count_end").text(data.endRow);
             // 总页数
             $("#page_count").text(data.pages);
-            postAllPage = data.pages;
+            usersAllPage = data.pages;
             // 总计
             $("#data_count").text(data.total);
             // 当前页数
@@ -78,9 +78,9 @@ function getUsersList(loginName, pageStart, pageSize, SynOrAsyn, url) {
                         '<td valign="center" align="center" width="30">' + list[i].email + '</td>' +
                         '<td valign="center" align="center" width="30">' + list[i].phone + '</td>' +
                         '<td valign="center" align="center" width="120">' + list[i].address + '</td>' +
-                        '<td valign="center" align="center" width="30"><a href="" onclick="users_edit(' +
+                        '<td valign="center" align="center" width="30"><a href="" onclick="usersEdit(' +
                         '\'' + list[i].id + '\',\'' + list[i].username + '\',\'' + list[i].password + '\',\'' + list[i].realName + '\',\'' + list[i].email + '\',\'' + list[i].phone + '\',\'' + list[i].address + '\');return false;">编辑</a>' +
-                        '           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="users_delete(' + list[i].id + '); return false;">删除</a> </td></tr>'
+                        '           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" onclick="usersDelete(' + list[i].id + '); return false;">删除</a> </td></tr>'
                 }
                 $('.user-data').append(content);
             } else {
@@ -192,7 +192,7 @@ function addUsers(addUser) {
             } catch (error) {
                 $.MsgBox.Alert("消息", result.message);
             }
-            $.MsgBox.Alert("消息", "注册成功");
+            $.MsgBox.Alert("消息", "添加成功");
             returnUserList();
         }
     });
@@ -231,7 +231,7 @@ function users_edit(id) {
     $("#USER_EDIT_DIV_ID").attr("style", "display:block;");//隐藏div
 }
 
-function users_edit(id, username, password, realName, email, phone, address) {
+function usersEdit(id, username, password, realName, email, phone, address) {
     $("#USERS_LIST_DIV_ID").attr("style", "display:none;");//隐藏div
     $("#USER_EDIT_DIV_ID").attr("style", "display:block;");//隐藏div
     $("#editId").val(id);
@@ -351,8 +351,8 @@ function update(userInfo) {
             }
             if (data) {
                 $.MsgBox.Alert("消息", "修改成功");
-                $("#POST_LIST_DIV_ID").attr("style", "display:block;");//隐藏div
-                $("#POST_ADD_DIV_ID").attr("style", "display:none;");//隐藏div
+                $("#USERS_LIST_DIV_ID").attr("style", "display:none;");//隐藏div
+                $("#USER_ADD_DIV_ID").attr("style", "display:block;");//隐藏div
                 let searchNameVal = $("#SEARCH_USER_NAME").val().trim();
                 getUsersList(searchNameVal, 0, everyPageDataCount, true, "user/api/pageListByEntity");
             } else {
@@ -362,14 +362,14 @@ function update(userInfo) {
     });
 }
 
-function users_delete(id) {
+function usersDelete(id) {
     deleteUser(id)
 }
 
 function deleteUser(id) {
     // 发送请求
     $.ajax({
-        url: "user/api/delete" + id, // url where to submit the request
+        url: "user/api/delete/" + id, // url where to submit the request
         type: "DELETE", // type of action POST || GET
         contentType: 'application/json;charset=UTF-8',
         dataType: "json",
@@ -395,12 +395,13 @@ function deleteUser(id) {
 
 function GOTO_USERS_NEXT_PAGE() {
     let searchNameVal = $("#SEARCH_USER_NAME").val().trim();
-    getUsersList(searchNameVal, 0, everyPageDataCount, true, "user/api/pageListByEntity");
+    usersPageIndex = usersPageIndex + 1;
+    getUsersList(searchNameVal, usersPageIndex, everyPageDataCount, true, "user/api/pageListByEntity");
 }
 
 function GOTO_USERS_TAIL_PAGE() {
     let searchNameVal = $("#SEARCH_USER_NAME").val().trim();
-    getUsersList(searchNameVal, postAllPage, everyPageDataCount, true, "user/api/pageListByEntity");
+    getUsersList(searchNameVal, usersAllPage, everyPageDataCount, true, "user/api/pageListByEntity");
 
 }
 
