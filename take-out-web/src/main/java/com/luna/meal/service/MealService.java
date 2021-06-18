@@ -1,8 +1,6 @@
 package com.luna.meal.service;
 
-import com.luna.meal.mapper.MealMapper;
 import com.luna.meal.entity.Meal;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.luna.meal.vo.MealVO;
 
@@ -84,10 +82,12 @@ public interface MealService {
     /**
      * 更新
      *
+     *
+     * @param oneSessionKey
      * @param meal 对象
      * @return 影响行数
      */
-    int update(Meal meal);
+    int update(String oneSessionKey, Meal meal);
 
     /**
      * 列表更新
@@ -100,10 +100,12 @@ public interface MealService {
     /**
      * 删除
      *
+     *
+     * @param oneSessionKey
      * @param id 主键
      * @return 影响行数
      */
-    int deleteById(Long id);
+    int deleteById(String oneSessionKey, Long id);
 
     /**
      * 条件删除
