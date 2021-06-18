@@ -5,14 +5,14 @@ import com.luna.common.dto.ResultDTO;
 import com.luna.common.dto.ResultDTOUtils;
 import com.luna.meal.entity.Meal;
 import com.luna.meal.service.MealService;
+import com.luna.meal.vo.MealVO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 /**
  * @Author: luna
- * @CreateTime: 2021-06-17 19:22:00
+ * @CreateTime: 2021-06-18 19:10:25
  */
 @RestController
 @RequestMapping("/meal/api")
@@ -39,14 +39,15 @@ public class MealController {
     }
 
     @GetMapping("/pageListByEntity/{page}/{size}")
-    public ResultDTO<PageInfo<Meal>> listPageByEntity(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size, Meal meal) {
-        PageInfo<Meal> pageInfo = mealService.listPageByEntity(page, size, meal);
+    public ResultDTO<PageInfo<MealVO>> listPageByEntity(@PathVariable(value = "page") int page,
+                                                      @PathVariable(value = "size") int size, Meal meal) {
+        PageInfo<MealVO> pageInfo = mealService.listPageByEntity(page, size, meal);
         return ResultDTOUtils.success(pageInfo);
     }
 
-
     @GetMapping("/pageList/{page}/{size}")
-    public ResultDTO<PageInfo<Meal>> listPage(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size) {
+    public ResultDTO<PageInfo<Meal>> listPage(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size) {
         PageInfo<Meal> pageInfo = mealService.listPage(page, size);
         return ResultDTOUtils.success(pageInfo);
     }
