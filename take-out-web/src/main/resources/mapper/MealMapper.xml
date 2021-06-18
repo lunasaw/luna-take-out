@@ -40,19 +40,19 @@
             <if test="seriseId != null  ">
                 and serise_id = #{seriseId,jdbcType=INTEGER}
             </if>
-            <if test="mealName != null  ">
+            <if test="mealName != null  and mealName != '' ">
                 and meal_name = #{mealName,jdbcType=VARCHAR}
             </if>
-            <if test="summarize != null  ">
+            <if test="summarize != null  and summarize != '' ">
                 and summarize = #{summarize,jdbcType=VARCHAR}
             </if>
-            <if test="description != null  ">
+            <if test="description != null  and description != '' ">
                 and description = #{description,jdbcType=VARCHAR}
             </if>
             <if test="mealPrice != null  ">
                 and meal_price = #{mealPrice,jdbcType=NUMERIC}
             </if>
-            <if test="image != null  ">
+            <if test="image != null  and image != '' ">
                 and image = #{image,jdbcType=VARCHAR}
             </if>
             <if test="createTime != null  ">
@@ -79,19 +79,19 @@
             <if test="seriseId != null  ">
                 and serise_id = #{seriseId,jdbcType=INTEGER}
             </if>
-            <if test="mealName != null  ">
+            <if test="mealName != null  and mealName != '' ">
                 and meal_name = #{mealName,jdbcType=VARCHAR}
             </if>
-            <if test="summarize != null  ">
+            <if test="summarize != null  and summarize != '' ">
                 and summarize = #{summarize,jdbcType=VARCHAR}
             </if>
-            <if test="description != null  ">
+            <if test="description != null  and description != '' ">
                 and description = #{description,jdbcType=VARCHAR}
             </if>
             <if test="mealPrice != null  ">
                 and meal_price = #{mealPrice,jdbcType=NUMERIC}
             </if>
-            <if test="image != null  ">
+            <if test="image != null  and image != '' ">
                 and image = #{image,jdbcType=VARCHAR}
             </if>
             <if test="createTime != null  ">

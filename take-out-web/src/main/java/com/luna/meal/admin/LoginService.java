@@ -3,14 +3,15 @@ package com.luna.meal.admin;
 import com.google.common.collect.ImmutableMap;
 import com.luna.common.dto.constant.ResultCode;
 import com.luna.common.encrypt.HashTools;
-import com.luna.common.text.ObjectUtils;
 import com.luna.common.text.RandomStrUtil;
 import com.luna.meal.constant.UserConstant;
 import com.luna.meal.entity.User;
 import com.luna.meal.exception.UserException;
+import com.luna.meal.mapper.UserMapper;
 import com.luna.meal.req.RegisterReq;
 import com.luna.meal.service.UserService;
 import com.luna.meal.tools.UserTools;
+import com.luna.meal.util.CookieUtils;
 import com.luna.meal.util.Req2DOUtils;
 import com.luna.meal.vo.UserVO;
 import com.luna.redis.util.RedisHashUtil;
@@ -18,9 +19,6 @@ import com.luna.redis.util.RedisKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.jvm.hotspot.asm.Register;
-
-import java.util.Date;
 
 /**
  * @author luna
@@ -30,7 +28,7 @@ import java.util.Date;
 public class LoginService {
 
     @Autowired
-    private UserService   userService;
+    private UserMapper    userMapper;
 
     @Autowired
     private UserTools     userTools;
@@ -42,7 +40,7 @@ public class LoginService {
     private RedisKeyUtil  redisKeyUtil;
 
     public UserVO login(String username, String password) {
-        User user = userService.getByEntity(new User(username));
+        User user = userMapper.getByEntity(new User(username));
         if (user == null) {
             throw new UserException(ResultCode.PARAMETER_INVALID, "用户不存在");
         }
@@ -72,10 +70,10 @@ public class LoginService {
 
     public boolean register(RegisterReq registerReq) {
         User user = Req2DOUtils.RegisterReq2UserDO(registerReq);
-        if (userService.countByEntity(user) == 1) {
+        if (userMapper.countByEntity(user) == 1) {
             throw new UserException(ResultCode.PARAMETER_INVALID, "用户已经存在");
         }
         user.setPassword(HashTools.md5(HashTools.md5(registerReq.getPassword())));
-        return userService.insert(user) == 1;
+        return userMapper.insert(user) == 1;
     }
 }

@@ -40,28 +40,28 @@
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
             </if>
-            <if test="username != null  ">
+            <if test="username != null  and username != '' ">
                 and username = #{username,jdbcType=VARCHAR}
             </if>
-            <if test="password != null  ">
+            <if test="password != null  and password != '' ">
                 and password = #{password,jdbcType=VARCHAR}
             </if>
-            <if test="realName != null  ">
+            <if test="realName != null  and realName != '' ">
                 and real_name = #{realName,jdbcType=VARCHAR}
             </if>
-            <if test="email != null  ">
+            <if test="email != null  and email != '' ">
                 and email = #{email,jdbcType=VARCHAR}
             </if>
-            <if test="phone != null  ">
+            <if test="phone != null  and phone != '' ">
                 and phone = #{phone,jdbcType=VARCHAR}
             </if>
-            <if test="address != null  ">
+            <if test="address != null  and address != '' ">
                 and address = #{address,jdbcType=VARCHAR}
             </if>
-            <if test="facePath != null  ">
+            <if test="facePath != null  and facePath != '' ">
                 and face_path = #{facePath,jdbcType=VARCHAR}
             </if>
-            <if test="faceData != null  ">
+            <if test="faceData != null  and faceData != '' ">
                 and face_data = #{faceData,jdbcType=VARCHAR}
             </if>
             <if test="createTime != null  ">
@@ -73,7 +73,7 @@
             <if test="version != null  ">
                 and version = #{version,jdbcType=INTEGER}
             </if>
-            <if test="admin != null  ">
+            <if test="admin != null  and admin != '' ">
                 and admin = #{admin,jdbcType=VARCHAR}
             </if>
         </where>
@@ -88,28 +88,28 @@
             <if test="id != null  ">
                 and id = #{id,jdbcType=INTEGER}
             </if>
-            <if test="username != null  ">
+            <if test="username != null  and username != '' ">
                 and username = #{username,jdbcType=VARCHAR}
             </if>
-            <if test="password != null  ">
+            <if test="password != null  and password != '' ">
                 and password = #{password,jdbcType=VARCHAR}
             </if>
-            <if test="realName != null  ">
+            <if test="realName != null  and realName != '' ">
                 and real_name = #{realName,jdbcType=VARCHAR}
             </if>
-            <if test="email != null  ">
+            <if test="email != null  and email != '' ">
                 and email = #{email,jdbcType=VARCHAR}
             </if>
-            <if test="phone != null  ">
+            <if test="phone != null  and phone != '' ">
                 and phone = #{phone,jdbcType=VARCHAR}
             </if>
-            <if test="address != null  ">
+            <if test="address != null  and address != '' ">
                 and address = #{address,jdbcType=VARCHAR}
             </if>
-            <if test="facePath != null  ">
+            <if test="facePath != null  and facePath != '' ">
                 and face_path = #{facePath,jdbcType=VARCHAR}
             </if>
-            <if test="faceData != null  ">
+            <if test="faceData != null  and faceData != '' ">
                 and face_data = #{faceData,jdbcType=VARCHAR}
             </if>
             <if test="createTime != null  ">
@@ -121,7 +121,7 @@
             <if test="version != null  ">
                 and version = #{version,jdbcType=INTEGER}
             </if>
-            <if test="admin != null  ">
+            <if test="admin != null  and admin != '' ">
                 and admin = #{admin,jdbcType=VARCHAR}
             </if>
         </where>

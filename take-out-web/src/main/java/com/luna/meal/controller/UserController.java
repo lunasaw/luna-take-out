@@ -5,9 +5,11 @@ import com.luna.common.dto.ResultDTO;
 import com.luna.common.dto.ResultDTOUtils;
 import com.luna.meal.entity.User;
 import com.luna.meal.service.UserService;
+import com.luna.meal.util.CookieUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -39,21 +41,23 @@ public class UserController {
     }
 
     @GetMapping("/pageListByEntity/{page}/{size}")
-    public ResultDTO<PageInfo<User>> listPageByEntity(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size, User user) {
+    public ResultDTO<PageInfo<User>> listPageByEntity(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size, User user) {
+        System.out.println(user);
         PageInfo<User> pageInfo = userService.listPageByEntity(page, size, user);
         return ResultDTOUtils.success(pageInfo);
     }
 
-
     @GetMapping("/pageList/{page}/{size}")
-    public ResultDTO<PageInfo<User>> listPage(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size) {
+    public ResultDTO<PageInfo<User>> listPage(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size) {
         PageInfo<User> pageInfo = userService.listPage(page, size);
         return ResultDTOUtils.success(pageInfo);
     }
 
     @PostMapping("/insert")
-    public ResultDTO<User> insert(@RequestBody User user) {
-        userService.insert(user);
+    public ResultDTO<User> insert(HttpServletRequest httpServletRequest, @RequestBody User user) {
+        userService.insert(CookieUtils.getOneSessionKey(httpServletRequest), user);
         return ResultDTOUtils.success(user);
     }
 
@@ -64,8 +68,8 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResultDTO<Boolean> update(@RequestBody User user) {
-        return ResultDTOUtils.success(userService.update(user) == 1);
+    public ResultDTO<Boolean> update(HttpServletRequest httpServletRequest, @RequestBody User user) {
+        return ResultDTOUtils.success(userService.update(CookieUtils.getOneSessionKey(httpServletRequest), user) == 1);
     }
 
     @PutMapping("/updateBatch")
@@ -74,8 +78,9 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResultDTO<Boolean> deleteOne(@PathVariable(value = "id") Long id) {
-        return ResultDTOUtils.success(userService.deleteById(id) == 1);
+    public ResultDTO<Boolean> deleteOne(HttpServletRequest httpServletRequest, @PathVariable(value = "id") Long id) {
+        return ResultDTOUtils
+            .success(userService.deleteById(CookieUtils.getOneSessionKey(httpServletRequest), id) == 1);
     }
 
     @DeleteMapping("/deleteByEntity")
@@ -84,10 +89,10 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResultDTO<Integer> deleteBatch(@RequestBody List<Long> ids) {
+    public ResultDTO<Integer> deleteBatch(HttpServletRequest httpServletRequest, @RequestBody List<Long> ids) {
         int result = 0;
         if (ids != null && ids.size() > 0) {
-            result = userService.deleteByIds(ids);
+            result = userService.deleteByIds(CookieUtils.getOneSessionKey(httpServletRequest), ids);
         }
         return ResultDTOUtils.success(result);
     }
