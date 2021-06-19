@@ -1,13 +1,27 @@
 package com.luna.meal.service.impl;
 
-import com.luna.meal.mapper.OrderMapper;
+import com.luna.common.dto.constant.ResultCode;
+import com.luna.meal.constant.UserConstant;
+import com.luna.meal.entity.Meal;
+import com.luna.meal.entity.OrderMeal;
+import com.luna.meal.entity.User;
+import com.luna.meal.exception.UserException;
+import com.luna.meal.mapper.*;
 import com.luna.meal.service.OrderService;
 import com.luna.meal.entity.Order;
+import com.luna.meal.tools.UserTools;
+import com.luna.meal.util.DO2VOUtils;
+import com.luna.meal.vo.OrderDetailVO;
+import com.luna.meal.vo.OrderMealVO;
+import com.luna.meal.vo.OrderVO;
+import com.luna.meal.vo.UserDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @Author: luna
@@ -17,11 +31,39 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private OrderMapper orderMapper;
+    private OrderMapper      orderMapper;
+
+    @Autowired
+    private OrderMealMapper  orderMealMapper;
+
+    @Autowired
+    private UserMapper       userMapper;
+
+    @Autowired
+    private MealSeriesMapper mealSeriesMapper;
+
+    @Autowired
+    private MealMapper       mealMapper;
+
+    @Autowired
+    private UserTools        userTools;
 
     @Override
-    public Order getById(Long id) {
-        return orderMapper.getById(id);
+    public OrderDetailVO getById(Long id) {
+        Order byId = orderMapper.getById(id);
+        User user = userMapper.getById(byId.getUserId());
+        UserDetailVO userDetailVO = DO2VOUtils.userDO2UserDetailVO(user);
+        List<OrderMeal> orderMeals = orderMealMapper.listByEntity(new OrderMeal(byId.getId()));
+        List<OrderMealVO> collect = orderMeals.stream().map(orderMeal -> {
+            Meal meal = mealMapper.getById(orderMeal.getMealId());
+            String mealName = meal.getMealName();
+            String seriesName = mealSeriesMapper.getById(meal.getSeriesId()).getSeriesName();
+            return DO2VOUtils.OrderMealDO2OrderMealVO(orderMeal, mealName, seriesName, meal.getMealPrice());
+        }).collect(Collectors.toList());
+        OrderDetailVO orderDetailVO = new OrderDetailVO();
+        orderDetailVO.setOrderMealVOList(collect);
+        orderDetailVO.setUserDetailVO(userDetailVO);
+        return orderDetailVO;
     }
 
     @Override
@@ -35,10 +77,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageInfo<Order> listPageByEntity(int page, int pageSize, Order order) {
+    public PageInfo<OrderVO> listPageByEntity(int page, int pageSize, Order order) {
         PageHelper.startPage(page, pageSize);
         List<Order> list = orderMapper.listByEntity(order);
-        return new PageInfo<Order>(list);
+        PageInfo<OrderVO> pageInfo = new PageInfo(list);
+        List<OrderVO> collect = list.stream().map(DO2VOUtils::orderDO2OrderVO).collect(Collectors.toList());
+        pageInfo.setList(collect);
+        return pageInfo;
     }
 
     @Override
@@ -64,8 +109,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int update(Order order) {
-        return orderMapper.update(order);
+    public int update(String oneSessionKey, Order order) {
+        User doUser = userTools.getUser(oneSessionKey);
+        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
+        }
+
+        Order byId = orderMapper.getById(order.getId());
+        byId.setOrderState(order.getOrderState());
+        return orderMapper.update(byId);
     }
 
     @Override
@@ -99,4 +151,3 @@ public class OrderServiceImpl implements OrderService {
     }
 
 }
-

@@ -3,13 +3,12 @@ package com.luna.meal.mapper;
 import com.luna.meal.entity.Order;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import javax.validation.constraints.*;
 import java.util.List;
 
 /**
  * @Author: luna
- * @CreateTime: 2021-06-17 19:21:22
+ * @CreateTime: 2021-06-19 10:09:04
  */
 @Mapper
 public interface OrderMapper {

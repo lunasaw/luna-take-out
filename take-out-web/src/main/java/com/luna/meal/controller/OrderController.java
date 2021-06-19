@@ -5,9 +5,13 @@ import com.luna.common.dto.ResultDTO;
 import com.luna.common.dto.ResultDTOUtils;
 import com.luna.meal.entity.Order;
 import com.luna.meal.service.OrderService;
+import com.luna.meal.util.CookieUtils;
+import com.luna.meal.vo.OrderDetailVO;
+import com.luna.meal.vo.OrderVO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -22,9 +26,9 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping("/get/{id}")
-    public ResultDTO<Order> getById(@PathVariable(value = "id") Long id) {
-        Order order = orderService.getById(id);
-        return ResultDTOUtils.success(order);
+    public ResultDTO<OrderDetailVO> getById(@PathVariable(value = "id") Long id) {
+        OrderDetailVO orderDetailVO = orderService.getById(id);
+        return ResultDTOUtils.success(orderDetailVO);
     }
 
     @GetMapping("/get")
@@ -39,8 +43,9 @@ public class OrderController {
     }
 
     @GetMapping("/pageListByEntity/{page}/{size}")
-    public ResultDTO<PageInfo<Order>> listPageByEntity(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size, Order order) {
-        PageInfo<Order> pageInfo = orderService.listPageByEntity(page, size, order);
+    public ResultDTO<PageInfo<OrderVO>> listPageByEntity(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size, Order order) {
+        PageInfo<OrderVO> pageInfo = orderService.listPageByEntity(page, size, order);
         return ResultDTOUtils.success(pageInfo);
     }
 
@@ -64,8 +69,9 @@ public class OrderController {
     }
 
     @PutMapping("/update")
-    public ResultDTO<Boolean> update(@RequestBody Order order) {
-        return ResultDTOUtils.success(orderService.update(order) == 1);
+    public ResultDTO<Boolean> update(HttpServletRequest httpServletRequest, @RequestBody Order order) {
+        return ResultDTOUtils
+            .success(orderService.update(CookieUtils.getOneSessionKey(httpServletRequest), order) == 1);
     }
 
     @PutMapping("/updateBatch")

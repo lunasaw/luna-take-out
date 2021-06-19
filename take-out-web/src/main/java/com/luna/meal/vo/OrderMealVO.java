@@ -1,54 +1,54 @@
-package com.luna.meal.entity;
+package com.luna.meal.vo;
 
 import java.util.Date;
-import java.io.Serializable;
 
 /**
- * (OrderMeal)实体类
- *
  * @author luna
- * @since 2021-06-17 19:21:06
+ * 2021/6/19
  */
-public class OrderMeal implements Serializable {
-    private static final long serialVersionUID = -99338216936659176L;
+public class OrderMealVO {
     /**
      * 订单详细表
      */
-    private Long id;
+    private Long    id;
     /**
      * 订单编号
      */
-    private Long orderId;
+    private Long    orderId;
     /**
-     * 物品编号
+     * 菜品名称
      */
-    private Long mealId;
+    private String  mealName;
+    /**
+     * 菜系名称
+     */
+    private String  seriesName;
+
+    /**
+     * 物品单价
+     */
+    private String  price;
     /**
      * 物品数量x单价
      */
-    private Double mealPrice;
+    private String  mealPrice;
     /**
      * 物品数量
      */
     private Integer mealCount;
+
     /**
      * 创建时间
      */
-    private Date createTime;
+    private String  createTime;
     /**
      * 修改时间
      */
-    private Date modifiedTime;
+    private String  modifiedTime;
     /**
      * 锁
      */
     private Integer version;
-
-    public OrderMeal(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public OrderMeal() {}
 
     public Long getId() {
         return id;
@@ -66,19 +66,35 @@ public class OrderMeal implements Serializable {
         this.orderId = orderId;
     }
 
-    public Long getMealId() {
-        return mealId;
+    public String getMealName() {
+        return mealName;
     }
 
-    public void setMealId(Long mealId) {
-        this.mealId = mealId;
+    public void setMealName(String mealName) {
+        this.mealName = mealName;
     }
 
-    public Double getMealPrice() {
+    public String getSeriesName() {
+        return seriesName;
+    }
+
+    public void setSeriesName(String seriesName) {
+        this.seriesName = seriesName;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getMealPrice() {
         return mealPrice;
     }
 
-    public void setMealPrice(Double mealPrice) {
+    public void setMealPrice(String mealPrice) {
         this.mealPrice = mealPrice;
     }
 
@@ -90,19 +106,19 @@ public class OrderMeal implements Serializable {
         this.mealCount = mealCount;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getModifiedTime() {
+    public String getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
+    public void setModifiedTime(String modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
 
@@ -113,5 +129,4 @@ public class OrderMeal implements Serializable {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
 }
