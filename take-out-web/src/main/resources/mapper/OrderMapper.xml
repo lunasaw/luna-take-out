@@ -6,7 +6,7 @@
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
-        <result property="orderState" column="order_state" jdbcType="VARCHAR"/>
+        <result property="orderState" column="order_state" jdbcType="INTEGER"/>
         <result property="orderPrice" column="order_price" jdbcType="NUMERIC"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
@@ -41,8 +41,8 @@
             <if test="orderTime != null  ">
                 and order_time = #{orderTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="orderState != null  and orderState != '' ">
-                and order_state = #{orderState,jdbcType=VARCHAR}
+            <if test="orderState != null  ">
+                and order_state = #{orderState,jdbcType=INTEGER}
             </if>
             <if test="orderPrice != null  ">
                 and order_price = #{orderPrice,jdbcType=NUMERIC}
@@ -74,8 +74,8 @@
             <if test="orderTime != null  ">
                 and order_time = #{orderTime,jdbcType=TIMESTAMP}
             </if>
-            <if test="orderState != null  and orderState != '' ">
-                and order_state = #{orderState,jdbcType=VARCHAR}
+            <if test="orderState != null  ">
+                and order_state = #{orderState,jdbcType=INTEGER}
             </if>
             <if test="orderPrice != null  ">
                 and order_price = #{orderPrice,jdbcType=NUMERIC}
@@ -131,7 +131,7 @@
                 #{orderTime,jdbcType=TIMESTAMP},
             </if>
             <if test="orderState != null  ">
-                #{orderState,jdbcType=VARCHAR},
+                #{orderState,jdbcType=INTEGER},
             </if>
             <if test="orderPrice != null  ">
                 #{orderPrice,jdbcType=NUMERIC},
@@ -166,7 +166,7 @@
             ,
             #{item.orderTime,jdbcType=TIMESTAMP}
             ,
-            #{item.orderState,jdbcType=VARCHAR}
+            #{item.orderState,jdbcType=INTEGER}
             ,
             #{item.orderPrice,jdbcType=NUMERIC}
             ,
@@ -188,7 +188,7 @@
                 order_time = #{orderTime,jdbcType=TIMESTAMP},
             </if>
             <if test="orderState != null  ">
-                order_state = #{orderState,jdbcType=VARCHAR},
+                order_state = #{orderState,jdbcType=INTEGER},
             </if>
             <if test="orderPrice != null  ">
                 order_price = #{orderPrice,jdbcType=NUMERIC},
@@ -214,7 +214,7 @@
             </if>
 
             <if test="where.orderState == null and set.orderState != null">
-                order_state = #{set.orderState,jdbcType=VARCHAR},
+                order_state = #{set.orderState,jdbcType=INTEGER},
             </if>
 
             <if test="where.orderPrice == null and set.orderPrice != null">
@@ -237,7 +237,7 @@
                 and order_time = #{where.orderTime,jdbcType=TIMESTAMP}
             </if>
             <if test="where.orderState != null and orderState != ''">
-                and order_state = #{where.orderState,jdbcType=VARCHAR}
+                and order_state = #{where.orderState,jdbcType=INTEGER}
             </if>
             <if test="where.orderPrice != null and orderPrice != ''">
                 and order_price = #{where.orderPrice,jdbcType=NUMERIC}
@@ -314,7 +314,7 @@
                 and order_time = #{orderTime,jdbcType=TIMESTAMP}
             </if>
             <if test="orderState != null  ">
-                and order_state = #{orderState,jdbcType=VARCHAR}
+                and order_state = #{orderState,jdbcType=INTEGER}
             </if>
             <if test="orderPrice != null  ">
                 and order_price = #{orderPrice,jdbcType=NUMERIC}
@@ -354,7 +354,7 @@
                 and order_time = #{orderTime,jdbcType=TIMESTAMP}
             </if>
             <if test="orderState != null  ">
-                and order_state = #{orderState,jdbcType=VARCHAR}
+                and order_state = #{orderState,jdbcType=INTEGER}
             </if>
             <if test="orderPrice != null  ">
                 and order_price = #{orderPrice,jdbcType=NUMERIC}

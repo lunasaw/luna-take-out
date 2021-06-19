@@ -1,9 +1,9 @@
 package com.luna.meal.service;
 
-import com.luna.meal.mapper.OrderMapper;
 import com.luna.meal.entity.Order;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.luna.meal.vo.OrderDetailVO;
+import com.luna.meal.vo.OrderVO;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface OrderService {
      * @param id 主键
      * @return 对象
      */
-    Order getById(Long id);
+    OrderDetailVO getById(Long id);
 
     /**
      * 通过实体不为空的属性作为筛选条件查询单个
@@ -40,12 +40,12 @@ public interface OrderService {
     /**
      * 条件分页查询
      *
-     * @param order    查询条件
-     * @param page     起始标号
+     * @param page 起始标号
      * @param pageSize 查询条目
+     * @param order 查询条件
      * @return 对象列表
      */
-    PageInfo<Order> listPageByEntity(int page, int pageSize, Order order);
+    PageInfo<OrderVO> listPageByEntity(int page, int pageSize, Order order);
 
     /**
      * 条件分页查询
@@ -83,10 +83,12 @@ public interface OrderService {
     /**
      * 更新
      *
+     *
+     * @param oneSessionKey
      * @param order 对象
      * @return 影响行数
      */
-    int update(Order order);
+    int update(String oneSessionKey, Order order);
 
     /**
      * 列表更新

@@ -7,43 +7,26 @@ import java.io.Serializable;
  * 订单主表(Order)实体类
  *
  * @author luna
- * @since 2021-06-17 19:21:22
+ * @since 2021-06-19 10:09:04
  */
 public class Order implements Serializable {
-    private static final long serialVersionUID = -34471873175903329L;
-    /**
-     * 订单编号
-     */
-    private Long id;
-    /**
-     * 创建用户
-     */
-    private Long userId;
-    /**
-     * 订单时间
-     */
-    private Date orderTime;
-    /**
-     * 订单状态
-     */
-    private String orderState;
-    /**
-     * 订单价格
-     */
-    private Double orderPrice;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    /**
-     * 修改时间
-     */
-    private Date modifiedTime;
-    /**
-     * 锁
-     */
-    private Integer version;
-
+    private static final long serialVersionUID = -62588210757812743L;
+    /** 订单编号 */
+    private Long              id;
+    /** 创建用户 */
+    private Long              userId;
+    /** 订单时间 */
+    private Date              orderTime;
+    /** 订单状态 */
+    private Integer           orderState;
+    /** 订单价格 */
+    private Double            orderPrice;
+    /** 创建时间 */
+    private Date              createTime;
+    /** 修改时间 */
+    private Date              modifiedTime;
+    /** 锁 */
+    private Integer           version;
 
     public Long getId() {
         return id;
@@ -69,11 +52,11 @@ public class Order implements Serializable {
         this.orderTime = orderTime;
     }
 
-    public String getOrderState() {
+    public Integer getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(String orderState) {
+    public void setOrderState(Integer orderState) {
         this.orderState = orderState;
     }
 
