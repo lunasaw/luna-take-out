@@ -4,7 +4,7 @@ luna-take-out 餐厅小筑外卖网
 
 # Contributor
 
-- Luna
+- [luna](https://github.com/lunasaw)
 
 # 代码规范
 
@@ -22,7 +22,7 @@ docker rmi luna-post
 
 docker run -d \
     -p 8084:8084 \
-    --name luna-post \
+    --name luna-take-out \
     --privileged=true \
     --restart always \
     -v /root/openresty/root/luna/meal:/root/luna/meal  \

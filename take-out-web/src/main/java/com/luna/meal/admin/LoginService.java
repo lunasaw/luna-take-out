@@ -76,4 +76,16 @@ public class LoginService {
         user.setPassword(HashTools.md5(HashTools.md5(registerReq.getPassword())));
         return userMapper.insert(user) == 1;
     }
+
+    public Boolean editPassword(String sessionKey, String oldPassword, String newPassword) {
+        User user = (User)redisHashUtil.get(UserConstant.SESSION_KEY + sessionKey, sessionKey);
+        User byId = userMapper.getById(user.getId());
+
+        if (!byId.getPassword().equals(HashTools.md5(HashTools.md5(oldPassword)))) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "密码错误");
+        }
+
+        byId.setPassword(HashTools.md5(HashTools.md5(newPassword)));
+        return userMapper.update(byId) == 1;
+    }
 }
