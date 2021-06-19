@@ -42,6 +42,15 @@ public class OrderController {
         return ResultDTOUtils.success(orderList);
     }
 
+    @GetMapping("/myPageListByEntity/{page}/{size}")
+    public ResultDTO<PageInfo<OrderVO>> myListPageByEntity(HttpServletRequest httpServletRequest,
+        @PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size, Order order) {
+        PageInfo<OrderVO> pageInfo =
+            orderService.myListPageByEntity(CookieUtils.getOneSessionKey(httpServletRequest), page, size, order);
+        return ResultDTOUtils.success(pageInfo);
+    }
+
     @GetMapping("/pageListByEntity/{page}/{size}")
     public ResultDTO<PageInfo<OrderVO>> listPageByEntity(@PathVariable(value = "page") int page,
         @PathVariable(value = "size") int size, Order order) {
@@ -49,9 +58,9 @@ public class OrderController {
         return ResultDTOUtils.success(pageInfo);
     }
 
-
     @GetMapping("/pageList/{page}/{size}")
-    public ResultDTO<PageInfo<Order>> listPage(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size) {
+    public ResultDTO<PageInfo<Order>> listPage(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size) {
         PageInfo<Order> pageInfo = orderService.listPage(page, size);
         return ResultDTOUtils.success(pageInfo);
     }

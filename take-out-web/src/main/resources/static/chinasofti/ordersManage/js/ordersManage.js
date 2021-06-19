@@ -1,6 +1,6 @@
 var everyPageDataCount = 7;
 var orderPageIndex = 0;
-var orderAllPage = 11;
+var orderAllPage = 0;
 $(document).ready(function () {
 
     let searchOrderId = $("#SEARCH_OID").val().trim();
@@ -82,7 +82,7 @@ function getOrderList(oid, orderState, pageStart, pageSize, SynOrAsyn, url) {
                         '<a href="" onclick="orders_info(\'' + list[i].id + '\'); return false;">详细信息</a></td>' +
                         '<td valign="center" align="center" width="30">' +
                         '<a href="" onclick="orders_handle(\'' + list[i].id + '\',\'2\'); return false;">作废</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                        '<a href="" onclick="orders_handle(\'' + list[i].id + '\',\'1\'); return false;">处理</a>' +
+                        '<a href="" onclick="orders_handle(\'' + list[i].id + '\',\'1\'); return false;">处理</a></td>' +
                         '<tr bgcolor="#FFFFFF">';
                 }
                 $('#POST_LIST_TBODY_ID').append(content);

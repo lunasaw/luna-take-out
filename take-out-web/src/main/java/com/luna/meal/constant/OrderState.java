@@ -8,14 +8,18 @@ import java.util.Objects;
  * 2021/6/19
  */
 public enum OrderState {
+
+    /** 确认收货 */
+    CONFIRM_RECEIPT("已确认收货", 3),
+
     /** 作废 */
-    CANCELLATION("作废", 2),
+    CANCELLATION("已取消", 2),
 
     /** 已处理 */
-    DISPOSE("已处理", 1),
+    DISPOSE("已开始送餐", 1),
 
     /** 未处理 */
-    NORMAL("未处理", 0);
+    NORMAL("未开始送餐", 0);
 
     private String  orderState;
 
