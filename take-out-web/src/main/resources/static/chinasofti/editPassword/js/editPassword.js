@@ -27,7 +27,7 @@ function adminSubPassword() {
         newPassword: newPassword,
         oldPassword: oldPassword
     }
-    editPassword(password);
+    editPassword("adminlogin.html", password);
 }
 
 function userSubPassword() {
@@ -60,15 +60,15 @@ function userSubPassword() {
         newPassword: newPassword,
         oldPassword: oldPassword
     }
-    editPassword(password);
+    editPassword("userlogin.html", password);
 
 
 }
 
-function editPassword(editPassword) {
+function editPassword(page, editPassword) {
     $.ajax({
         type: "POST",
-        url: "/post/api/editPassword",
+        url: "user/api/editPassword",
         contentType: 'application/json;charset=UTF-8',
         data: JSON.stringify(editPassword),
         dataType: "json",
@@ -81,7 +81,7 @@ function editPassword(editPassword) {
             }
             if (data) {
                 $.MsgBox.Alert("消息", "密码修改成功，请重新登录！");
-                window.parent.location.replace("login.html");
+                window.parent.location.replace(page);
             } else {
                 $.MsgBox.Alert("消息", "密码修改失败，请重新注册！");
             }

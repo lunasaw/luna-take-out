@@ -1,5 +1,6 @@
 package com.luna.meal.service.impl;
 
+import com.google.common.collect.ImmutableMap;
 import com.luna.common.dto.constant.ResultCode;
 import com.luna.common.encrypt.HashTools;
 import com.luna.meal.constant.UserConstant;
@@ -9,6 +10,7 @@ import com.luna.meal.service.UserService;
 import com.luna.meal.entity.User;
 
 import com.luna.meal.tools.UserTools;
+import com.luna.redis.util.RedisHashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
@@ -24,10 +26,13 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserMapper    userMapper;
 
     @Autowired
-    private UserTools  userTools;
+    private UserTools     userTools;
+
+    @Autowired
+    private RedisHashUtil redisHashUtil;
 
     @Override
     public User getById(Long id) {
@@ -81,20 +86,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public int update(String oneSessionKey, User user) {
         User doUser = userTools.getUser(oneSessionKey);
-        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+        if (!Objects.equals(doUser.getId(), user.getId()) && !Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
             throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
         }
         User mapperById = userMapper.getById(user.getId());
-        if (mapperById == null) {
-            throw new UserException(ResultCode.PARAMETER_INVALID, "用户不存在");
-        }
+
         mapperById.setUsername(user.getUsername());
         mapperById.setRealName(user.getRealName());
         mapperById.setEmail(user.getEmail());
         mapperById.setPhone(user.getPhone());
         mapperById.setAddress(user.getAddress());
-        mapperById.setPassword(HashTools.md5(HashTools.md5(user.getPassword())));
-        return userMapper.update(mapperById);
+        int update = userMapper.update(mapperById);
+        if (update == 1) {
+            redisHashUtil.set(UserConstant.SESSION_KEY + oneSessionKey,
+                ImmutableMap.of(oneSessionKey, user));
+        }
+        return update;
     }
 
     @Override

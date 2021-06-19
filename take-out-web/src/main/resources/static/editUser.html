@@ -11,22 +11,17 @@
 	</head>
 
 	<body style="height: auto;">
-		
-		
-		
-		
-		
-		
 		<!--<div id="ORG_ADD_DIV_ID" class="card card-info" style="display:none">  -->
 		<div id="POST_ADD_DIV_ID" class="card card-info">
 	        <input id="regUUID" type="hidden" value="">
 	        <div class="form-horizontal">
 				<div class="card-body">
-			             
 			           <div class="form-group">
 			                 <label for="JI_JOB_NAME" class="col-sm-2 control-label">真实姓名：</label>
 			                 <div class="col-sm-10">
-			                 	<input value="" type="text" name="editTrueName" id="editTrueName" class="form-control" style="width:600px" maxlength="20">
+				                 <input type="hidden" id="editId">
+				                 <input value="" type="text" name="editTrueName" id="editTrueName" class="form-control"
+				                        style="width:600px" maxlength="20">
 			                 </div>
 			             </div>
 			             <div class="form-group">
@@ -49,9 +44,9 @@
 			       		  </div>
 			              <!-- /.card-body -->
 	             <!-- /.card-body -->
-			             <div class="card-footer col-md-3 col-md-offset-4" style="width:100%" align="center">
-			               <button type="button" class="btn btn-info" onclick="edtiUserCheck()">提交</button>
-			             </div>
+					<div class="card-footer col-md-3 col-md-offset-4" style="width:100%" align="center">
+						<button type="button" class="btn btn-info" onclick="editUserCheck()">提交</button>
+					</div>
 			             <!-- /.card-footer -->
 			             <div class="card-footer col-md-3 col-md-offset-4" id="tishi" style="text-align: center;color: red;font-size: 15px">
 									     

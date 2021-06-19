@@ -3,20 +3,57 @@ $(document).ready(function () {
 
 });
 
+function checkResultAndGetData($result) {
+    if ($result.success == false) {
+        throw $result;
+    }
+    return $result.data;
+}
 
 function users_edit() {
 
+    $.ajax({
+        type: "GET",
+        url: "user/api/sysUser",
+        contentType: 'application/json;charset=UTF-8',
+        // data: serializeFormData($('.form-sign')),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                $.MsgBox.Alert("消息", result.message);
+            }
+            if (result.success) {
+                $("#editId").attr("value", data.id);
+                $("#editTrueName").attr("value", data.realName);
+                $("#editEmail").val(data.email);
+                $("#editPhone").attr("value", data.phone);
+                $("#editAddress").attr("value", data.address);
+            }
+        }
+    })
 
 }
 
 
-function edtiUserCheck() {
+function editUserCheck() {
 
-    var trueName = $("#editTrueName").val().trim();
-    var email = $("#editEmail").val().trim();
-    var phone = $("#editPhone").val().trim();
-    var address = $("#editAddress").val().trim();
+    let id = $("#editId").val().trim();
+    let trueName = $("#editTrueName").val().trim();
+    let email = $("#editEmail").val().trim();
+    let phone = $("#editPhone").val().trim();
+    let address = $("#editAddress").val().trim();
 
+    let editUser = {
+        id: id,
+        realName: trueName,
+        email: email,
+        phone: phone,
+        address: address
+    }
 
     if (trueName == "") {
         $("#tishi").html("真实姓名不能为空");
@@ -58,11 +95,30 @@ function edtiUserCheck() {
         return;
     }
 
-
-    $.MsgBox.Alert("消息", "修改成功");
-
+    updateUser(editUser);
 }
 
+function updateUser(editUser) {
+    $.ajax({
+        type: "PUT",
+        url: "user/api/update",
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(editUser),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+                $.MsgBox.Alert("消息", result.message);
+            }
+            if (data) {
+                $.MsgBox.Alert("消息", "更新成功");
+            }
+        }
+    })
+}
 
 
 
