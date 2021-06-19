@@ -31,9 +31,9 @@ public class FileUploadUtils {
     public static final int  DEFAULT_FILE_NAME_LENGTH = 100;
 
     /**
-     * 默认上传的地址 mac:luna /Users/luna/Document/project/post linux:docker /root/luna/post
+     * 默认上传的地址 mac:luna /Users/luna/Document/project/meal linux:docker /root/luna/meal
      */
-    public static String     defaultBaseDir           = "/Users/luna/Document/project/post";
+    public static String     defaultBaseDir           = "/Users/luna/Document/project/meal";
 
     public static void setDefaultBaseDir(String defaultBaseDir) {
         FileUploadUtils.defaultBaseDir = defaultBaseDir;
