@@ -20,6 +20,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * @author luna
  * 2021/6/18
@@ -78,7 +80,7 @@ public class LoginService {
     }
 
     public Boolean editPassword(String sessionKey, String oldPassword, String newPassword) {
-        User user = (User)redisHashUtil.get(UserConstant.SESSION_KEY + sessionKey, sessionKey);
+        User user = userTools.getUser(sessionKey);
         User byId = userMapper.getById(user.getId());
 
         if (!byId.getPassword().equals(HashTools.md5(HashTools.md5(oldPassword)))) {
