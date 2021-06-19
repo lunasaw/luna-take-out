@@ -38,8 +38,7 @@ public class DO2VOUtils {
         OrderVO orderVO = new OrderVO();
         orderVO.setId(order.getId());
         orderVO.setUserId(order.getUserId());
-        orderVO.setOrderTime(order.getOrderTime() != null
-            ? DateUtil.parseDateToStr(DateUtil.YYYY_MM_DD_HH_MM_SS, order.getOrderTime()) : "");
+        orderVO.setOrderTime(DateUtil.parseDateToStr(DateUtil.YYYY_MM_DD_HH_MM_SS, order.getOrderTime()));
         orderVO.setOrderState(OrderState.getState(order.getOrderState()));
         orderVO.setOrderPrice(order.getOrderPrice().toString());
         orderVO.setCreateTime(DateUtil.parseDateToStr(DateUtil.YYYY_MM_DD, order.getCreateTime()));

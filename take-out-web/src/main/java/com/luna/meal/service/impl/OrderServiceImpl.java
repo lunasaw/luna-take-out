@@ -1,24 +1,27 @@
 package com.luna.meal.service.impl;
 
 import com.luna.common.dto.constant.ResultCode;
+import com.luna.meal.constant.OrderState;
 import com.luna.meal.constant.UserConstant;
-import com.luna.meal.entity.Meal;
-import com.luna.meal.entity.OrderMeal;
-import com.luna.meal.entity.User;
+import com.luna.meal.entity.*;
 import com.luna.meal.exception.UserException;
 import com.luna.meal.mapper.*;
 import com.luna.meal.service.OrderService;
-import com.luna.meal.entity.Order;
 import com.luna.meal.tools.UserTools;
 import com.luna.meal.util.DO2VOUtils;
 import com.luna.meal.vo.OrderDetailVO;
 import com.luna.meal.vo.OrderMealVO;
 import com.luna.meal.vo.OrderVO;
 import com.luna.meal.vo.UserDetailVO;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,6 +47,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private MealMapper       mealMapper;
+
+    @Autowired
+    private CartMapper       cartMapper;
 
     @Autowired
     private UserTools        userTools;
@@ -103,6 +109,42 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> listByIds(List<Long> ids) {
         return orderMapper.listByIds(ids);
+    }
+
+    @Override
+    @Transactional
+    public OrderVO createOrder(String oneSessionKey) {
+        User user = userTools.getUser(oneSessionKey);
+        List<Cart> carts = cartMapper.listByEntity(new Cart(user.getId()));
+        // 新建一个订单插入
+        Order order = new Order();
+        order.setUserId(user.getId());
+        order.setOrderState(OrderState.NORMAL.getOrderType());
+        order.setOrderTime(new Date());
+        orderMapper.insert(order);
+        final BigDecimal[] orderPrice = {new BigDecimal("0.0")};
+        carts.forEach(cart -> {
+            Long mealId = cart.getMealId();
+            Meal meal = mealMapper.getById(mealId);
+            // 新建订单详细插入
+            OrderMeal orderMeal = new OrderMeal();
+            orderMeal.setOrderId(order.getId());
+            orderMeal.setMealId(mealId);
+            orderMeal.setMealCount(cart.getCount());
+            // 计算部分总价
+            BigDecimal priceBigDecimal = new BigDecimal(Double.toString(meal.getMealPrice()));
+            BigDecimal decimal = priceBigDecimal.multiply(BigDecimal.valueOf(cart.getCount()));
+            decimal = decimal.setScale(2, BigDecimal.ROUND_DOWN);
+            orderPrice[0] = orderPrice[0].add(decimal);
+            orderMeal.setMealPrice(decimal.doubleValue());
+            orderMealMapper.insert(orderMeal);
+            // 删除购物车
+            cartMapper.deleteById(cart.getId());
+        });
+        Order byId = orderMapper.getById(order.getId());
+        byId.setOrderPrice(orderPrice[0].doubleValue());
+        orderMapper.update(byId);
+        return DO2VOUtils.orderDO2OrderVO(byId);
     }
 
     @Override

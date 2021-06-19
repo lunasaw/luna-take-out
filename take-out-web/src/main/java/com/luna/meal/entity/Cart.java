@@ -14,32 +14,37 @@ public class Cart implements Serializable {
     /**
      * 购物车
      */
-    private Long id;
+    private Long              id;
     /**
      * 用户编号
      */
-    private Long userId;
+    private Long              userId;
     /**
      * 商品编号
      */
-    private Long mealId;
+    private Long              mealId;
     /**
      * 数量
      */
-    private Integer count;
+    private Integer           count;
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Date              createTime;
     /**
      * 修改时间
      */
-    private Date modifiedTime;
+    private Date              modifiedTime;
     /**
      * 锁
      */
-    private Integer version;
+    private Integer           version;
 
+    public Cart() {}
+
+    public Cart(Long userId) {
+        this.userId = userId;
+    }
 
     public Long getId() {
         return id;
