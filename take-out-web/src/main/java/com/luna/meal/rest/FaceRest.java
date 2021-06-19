@@ -34,9 +34,10 @@ public class FaceRest {
             faceService.registerFace(CookieUtils.getOneSessionKey(request), faceBase64));
     }
 
-    @PostMapping("/faceLogin")
-    public ResultDTO<UserVO> checkFace(HttpServletResponse response, String faceBase64) {
-        UserVO userVO = faceService.login(faceBase64);
+    @PostMapping("/faceLogin/{site}")
+    public ResultDTO<UserVO> checkFace(HttpServletResponse response, String faceBase64,
+        @PathVariable(name = "site") String site) {
+        UserVO userVO = faceService.login(faceBase64, site);
         Cookie cookie = new Cookie(CookieUtils.SESSION_KEY_NAME, userVO.getSessionKey());
         cookie.setPath("/");
         cookie.setMaxAge(UserConstant.SESSION_TIME);

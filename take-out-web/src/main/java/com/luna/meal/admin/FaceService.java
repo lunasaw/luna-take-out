@@ -22,6 +22,7 @@ import com.luna.meal.util.FileUploadUtils;
 import com.luna.meal.vo.UserVO;
 import com.luna.redis.util.RedisHashUtil;
 import com.luna.redis.util.RedisKeyUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author luna@mac
@@ -81,7 +84,7 @@ public class FaceService {
         }
         String checkPath = getPath(base64, user);
         UserFaceResultDTO userFaceResultDTO = BaiduUserFaceApi.faceUserAdd(baiduProperties.getBaiduKey(),
-            base64, "BASE64", LUNA_MEAL, byId.getId().toString(), JSON.toJSONString(byId));
+            base64, "BASE64", LUNA_MEAL, byId.getId().toString(), byId.getAdmin());
         byId.setFaceData(userFaceResultDTO.getFaceToken());
         byId.setFacePath(path + checkPath);
         return userMapper.update(byId) == 1;
@@ -109,21 +112,39 @@ public class FaceService {
      * 人脸检查
      * 
      * @param base64
+     * @param site
      * @return
      */
-    public UserVO login(String base64) {
+    public UserVO login(String base64, String site) {
         UserInfoListDTO userInfoListDTO =
             BaiduUserFaceApi.userFaceSearch(baiduProperties.getBaiduKey(), base64, "BASE64", LUNA_MEAL);
-        List<UserInfoResultDTO> userList = userInfoListDTO.getUserList();
-        String nonceStrWithUUID = RandomStrUtil.generateNonceStrWithUUID();
-        Optional<UserInfoResultDTO> first =
-            userList.stream().filter(userInfoResultDTO -> userInfoResultDTO.getScore() > SCORE).findFirst();
-        if (!first.isPresent()) {
-            return null;
+
+        if (userInfoListDTO == null) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "光线遮挡，请选择合适地点重试！");
         }
 
-        long l = Long.parseLong(first.get().getUserId());
-        User user = userMapper.getById(l);
+        List<UserInfoResultDTO> userList = userInfoListDTO.getUserList();
+        String nonceStrWithUUID = RandomStrUtil.generateNonceStrWithUUID();
+
+        List<UserInfoResultDTO> collect = userList.stream()
+            .filter(userInfoResultDTO -> userInfoResultDTO.getScore() > SCORE).collect(Collectors.toList());
+
+        if (CollectionUtils.isEmpty(collect)) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "光线遮挡，请选择合适地点重试！");
+        }
+
+        Optional<UserInfoResultDTO> first = collect.stream().filter(userInfoResultDTO -> {
+            long l = Long.parseLong(userInfoResultDTO.getUserId());
+            User temp = userMapper.getById(l);
+            return Objects.equals(temp.getAdmin(), site);
+        }).findFirst();
+
+        if (!first.isPresent()) {
+            throw new UserException(ResultCode.PARAMETER_INVALID, "该角色权限未注册人脸，请登陆后注册人脸后重试");
+        }
+
+        UserInfoResultDTO userInfoResultDTO = first.get();
+        User user = userMapper.getById(Long.parseLong(userInfoResultDTO.getUserId()));
         // 登陆图片
         String checkPath = getPath(base64, user);
         user.setFacePath(path + checkPath);
