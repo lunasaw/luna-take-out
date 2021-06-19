@@ -4,10 +4,13 @@ import com.github.pagehelper.PageInfo;
 import com.luna.common.dto.ResultDTO;
 import com.luna.common.dto.ResultDTOUtils;
 import com.luna.meal.entity.Cart;
+import com.luna.meal.req.ShoppingCartReq;
 import com.luna.meal.service.CartService;
+import com.luna.meal.util.CookieUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -39,21 +42,22 @@ public class CartController {
     }
 
     @GetMapping("/pageListByEntity/{page}/{size}")
-    public ResultDTO<PageInfo<Cart>> listPageByEntity(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size, Cart cart) {
+    public ResultDTO<PageInfo<Cart>> listPageByEntity(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size, Cart cart) {
         PageInfo<Cart> pageInfo = cartService.listPageByEntity(page, size, cart);
         return ResultDTOUtils.success(pageInfo);
     }
 
-
     @GetMapping("/pageList/{page}/{size}")
-    public ResultDTO<PageInfo<Cart>> listPage(@PathVariable(value = "page") int page, @PathVariable(value = "size") int size) {
+    public ResultDTO<PageInfo<Cart>> listPage(@PathVariable(value = "page") int page,
+        @PathVariable(value = "size") int size) {
         PageInfo<Cart> pageInfo = cartService.listPage(page, size);
         return ResultDTOUtils.success(pageInfo);
     }
 
     @PostMapping("/insert")
-    public ResultDTO<Cart> insert(@RequestBody Cart cart) {
-        cartService.insert(cart);
+    public ResultDTO<Cart> insert(HttpServletRequest httpServletRequest, @RequestBody Cart cart) {
+        cartService.insert(CookieUtils.getOneSessionKey(httpServletRequest), cart);
         return ResultDTOUtils.success(cart);
     }
 
