@@ -5,6 +5,7 @@ import com.luna.common.dto.constant.ResultCode;
 import com.luna.meal.admin.LoginService;
 import com.luna.meal.constant.UserConstant;
 import com.luna.meal.entity.User;
+import com.luna.meal.req.EditPasswordReq;
 import com.luna.meal.req.LoginReq;
 import com.luna.meal.req.RegisterReq;
 import com.luna.meal.util.CookieUtils;
@@ -52,5 +53,12 @@ public class UserRest {
     @PostMapping("/register")
     public ResultDTO<Boolean> register(@RequestBody RegisterReq registerReq) {
         return new ResultDTO<>(true, ResultCode.SUCCESS, ResultCode.MSG_SUCCESS, loginService.register(registerReq));
+    }
+
+    @PostMapping("/editPassword")
+    public ResultDTO<Boolean> editPassword(HttpServletRequest request, @RequestBody EditPasswordReq editPasswordReq) {
+        return new ResultDTO<>(true, ResultCode.SUCCESS, ResultCode.MSG_SUCCESS,
+            loginService.editPassword(CookieUtils.getOneSessionKey(request), editPasswordReq.getOldPassword(),
+                editPasswordReq.getNewPassword()));
     }
 }

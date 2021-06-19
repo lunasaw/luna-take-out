@@ -22,14 +22,19 @@ function adminSubPassword() {
         $("#tishi").html("当前密码不能为空");
         return;
     }
-    window.parent.location.replace("adminlogin.html");
+
+    let password = {
+        newPassword: newPassword,
+        oldPassword: oldPassword
+    }
+    editPassword(password);
 }
 
 function userSubPassword() {
 
-    var newPassword = $("#newPassword").val();
-    var newPasswordCon = $("#newPasswordCon").val()
-    var oldPassword = $("#oldPassword").val()
+    let newPassword = $("#newPassword").val();
+    let newPasswordCon = $("#newPasswordCon").val()
+    let oldPassword = $("#oldPassword").val()
 
 
     if (typeof (newPassword) == 'undefined' || newPassword.trim() == "") {
@@ -50,5 +55,43 @@ function userSubPassword() {
         $("#tishi").html("当前密码不能为空");
         return;
     }
-    window.parent.location.replace("userlogin.html");
+
+    let password = {
+        newPassword: newPassword,
+        oldPassword: oldPassword
+    }
+    editPassword(password);
+
+
+}
+
+function editPassword(editPassword) {
+    $.ajax({
+        type: "POST",
+        url: "/post/api/editPassword",
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify(editPassword),
+        dataType: "json",
+        success: function (result) {
+            console.log(result);
+            let data;
+            try {
+                data = checkResultAndGetData(result);
+            } catch (error) {
+            }
+            if (data) {
+                $.MsgBox.Alert("消息", "密码修改成功，请重新登录！");
+                window.parent.location.replace("login.html");
+            } else {
+                $.MsgBox.Alert("消息", "密码修改失败，请重新注册！");
+            }
+        }
+    });
+}
+
+function checkResultAndGetData($result) {
+    if ($result.success == false) {
+        throw $result;
+    }
+    return $result.data;
 }
