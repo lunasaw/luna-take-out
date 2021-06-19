@@ -1,17 +1,16 @@
 package com.luna.meal.service.impl;
 
+import com.luna.meal.entity.User;
 import com.luna.meal.mapper.CartMapper;
 import com.luna.meal.service.CartService;
 import com.luna.meal.entity.Cart;
 
-import javax.annotation.Resource;
-
+import com.luna.meal.tools.UserTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +22,9 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private CartMapper cartMapper;
+
+    @Autowired
+    private UserTools  userTools;
 
     @Override
     public Cart getById(Long id) {
@@ -59,7 +61,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public int insert(Cart cart) {
+    public int insert(String oneSessionKey, Cart cart) {
+        User user = userTools.getUser(oneSessionKey);
+        cart.setUserId(user.getId());
         return cartMapper.insert(cart);
     }
 
@@ -104,4 +108,3 @@ public class CartServiceImpl implements CartService {
     }
 
 }
-

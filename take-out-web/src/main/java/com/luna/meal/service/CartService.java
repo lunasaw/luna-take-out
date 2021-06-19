@@ -1,8 +1,6 @@
 package com.luna.meal.service;
 
-import com.luna.meal.mapper.CartMapper;
 import com.luna.meal.entity.Cart;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
@@ -67,10 +65,12 @@ public interface CartService {
     /**
      * 插入
      *
+     *
+     * @param oneSessionKey
      * @param cart 对象
      * @return 影响行数
      */
-    int insert(Cart cart);
+    int insert(String oneSessionKey, Cart cart);
 
     /**
      * 列表插入
