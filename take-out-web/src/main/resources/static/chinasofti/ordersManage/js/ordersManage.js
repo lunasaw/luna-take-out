@@ -155,7 +155,7 @@ function getOrderDetail(oid) {
     })
 }
 
-function returnordersList() {
+function returnOrdersList() {
     $("#ORDER_LIST_DIV_ID").attr("style", "display:block;");//隐藏div
     $("#orderInfoDivId").attr("style", "display:none;");//隐藏div
 }
@@ -182,7 +182,7 @@ function orders_handle(oid, orderState) {
             }
             let searchOrderId = $("#SEARCH_OID").val().trim();
             let orderState = $("#SEARCH_ORDER_STATE").val();
-            returnordersList();
+            returnOrdersList();
             getOrderList(searchOrderId, orderState, orderPageIndex, everyPageDataCount, true, "order/api/pageListByEntity");
         }
     });

@@ -1,17 +1,23 @@
 package com.luna.meal.service.impl;
 
+import com.luna.meal.entity.Meal;
 import com.luna.meal.entity.User;
 import com.luna.meal.mapper.CartMapper;
+import com.luna.meal.mapper.MealMapper;
+import com.luna.meal.mapper.MealSeriesMapper;
 import com.luna.meal.service.CartService;
 import com.luna.meal.entity.Cart;
 
 import com.luna.meal.tools.UserTools;
+import com.luna.meal.util.DO2VOUtils;
+import com.luna.meal.vo.CartMealVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: luna
@@ -21,10 +27,16 @@ import java.util.List;
 public class CartServiceImpl implements CartService {
 
     @Autowired
-    private CartMapper cartMapper;
+    private CartMapper       cartMapper;
 
     @Autowired
-    private UserTools  userTools;
+    private UserTools        userTools;
+
+    @Autowired
+    private MealMapper       mealMapper;
+
+    @Autowired
+    private MealSeriesMapper mealSeriesMapper;
 
     @Override
     public Cart getById(Long id) {
@@ -42,10 +54,18 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public PageInfo<Cart> listPageByEntity(int page, int pageSize, Cart cart) {
+    public PageInfo<CartMealVO> listPageByEntity(int page, int pageSize, Cart cart) {
         PageHelper.startPage(page, pageSize);
         List<Cart> list = cartMapper.listByEntity(cart);
-        return new PageInfo<Cart>(list);
+        PageInfo<CartMealVO> pageInfo = new PageInfo(list);
+        List<CartMealVO> collect = list.stream().map(cartTemp -> {
+            Long mealId = cartTemp.getMealId();
+            Meal byId = mealMapper.getById(mealId);
+            String seriesName = mealSeriesMapper.getById(byId.getSeriesId()).getSeriesName();
+            return DO2VOUtils.cartDO2CartMealVO(cartTemp, byId.getMealName(), seriesName, byId.getMealPrice());
+        }).collect(Collectors.toList());
+        pageInfo.setList(collect);
+        return pageInfo;
     }
 
     @Override

@@ -7,6 +7,8 @@ import com.luna.meal.entity.Cart;
 import com.luna.meal.req.ShoppingCartReq;
 import com.luna.meal.service.CartService;
 import com.luna.meal.util.CookieUtils;
+import com.luna.meal.vo.CartMealVO;
+import com.luna.meal.vo.OrderMealVO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,9 +44,9 @@ public class CartController {
     }
 
     @GetMapping("/pageListByEntity/{page}/{size}")
-    public ResultDTO<PageInfo<Cart>> listPageByEntity(@PathVariable(value = "page") int page,
+    public ResultDTO<PageInfo<CartMealVO>> listPageByEntity(@PathVariable(value = "page") int page,
         @PathVariable(value = "size") int size, Cart cart) {
-        PageInfo<Cart> pageInfo = cartService.listPageByEntity(page, size, cart);
+        PageInfo<CartMealVO> pageInfo = cartService.listPageByEntity(page, size, cart);
         return ResultDTOUtils.success(pageInfo);
     }
 

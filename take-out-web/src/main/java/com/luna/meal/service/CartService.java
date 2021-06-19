@@ -2,6 +2,7 @@ package com.luna.meal.service;
 
 import com.luna.meal.entity.Cart;
 import com.github.pagehelper.PageInfo;
+import com.luna.meal.vo.CartMealVO;
 
 import java.util.List;
 
@@ -38,12 +39,12 @@ public interface CartService {
     /**
      * 条件分页查询
      *
-     * @param cart     查询条件
-     * @param page     起始标号
+     * @param page 起始标号
      * @param pageSize 查询条目
+     * @param cart 查询条件
      * @return 对象列表
      */
-    PageInfo<Cart> listPageByEntity(int page, int pageSize, Cart cart);
+    PageInfo<CartMealVO> listPageByEntity(int page, int pageSize, Cart cart);
 
     /**
      * 条件分页查询
