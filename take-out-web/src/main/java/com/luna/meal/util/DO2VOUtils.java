@@ -2,11 +2,10 @@ package com.luna.meal.util;
 
 import com.luna.common.date.DateUtil;
 import com.luna.meal.constant.OrderState;
-import com.luna.meal.entity.Meal;
-import com.luna.meal.entity.Order;
-import com.luna.meal.entity.OrderMeal;
-import com.luna.meal.entity.User;
+import com.luna.meal.entity.*;
 import com.luna.meal.vo.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author luna
@@ -90,5 +89,23 @@ public class DO2VOUtils {
         orderMealVO.setVersion(orderMeal.getVersion());
         return orderMealVO;
 
+    }
+
+    public static CartMealVO cartDO2CartMealVO(Cart cart, String mealName, String seriesName, Double price) {
+        if (cart == null) {
+            return null;
+        }
+
+        CartMealVO cartMealVO = new CartMealVO();
+        cartMealVO.setId(cart.getId());
+        cartMealVO.setMealName(mealName);
+        cartMealVO.setSeriesName(seriesName);
+        BigDecimal priceBigDecimal = new BigDecimal(Double.toString(price));
+        cartMealVO.setPrice(priceBigDecimal.toString());
+        BigDecimal decimal = priceBigDecimal.multiply(BigDecimal.valueOf(cart.getCount()));
+        decimal.setScale(2, BigDecimal.ROUND_DOWN);
+        cartMealVO.setMealPrice(decimal.toString());
+        cartMealVO.setMealCount(cart.getCount());
+        return cartMealVO;
     }
 }
