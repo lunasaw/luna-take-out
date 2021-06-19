@@ -152,7 +152,7 @@
 			let base = getBase64();
 			$.ajax({
 				type: "POST",
-				url: "/meal/user/api/faceLogin",
+				url: "/meal/user/api/faceLogin/0",
 				data: {"faceBase64": base},
 				dataType: "json",
 				success: function (result) {
@@ -161,7 +161,7 @@
 					try {
 						data = checkResultAndGetData(result);
 					} catch (error) {
-						$.MsgBox.Alert("消息", "出错了，请于管理员联系");
+						$.MsgBox.Alert("消息", result.message);
 						return;
 					}
 					console.log(data);
