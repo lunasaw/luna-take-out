@@ -63,7 +63,7 @@
                     <configuration>
                         <forceTags>true</forceTags>
                         <!--指定生成的镜像名 该处修改为自己想要生成的镜像名称-->
-                        <imageName>luna-post</imageName>
+                        <imageName>luna-meal</imageName>
                         <!--指定标签 -->
                         <imageTags>
                             <imageTag>latest</imageTag>

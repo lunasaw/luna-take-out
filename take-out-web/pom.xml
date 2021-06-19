@@ -10,8 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>take-out-web</artifactId>
-
-
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
