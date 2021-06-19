@@ -71,6 +71,12 @@ public class OrderController {
         return ResultDTOUtils.success(order);
     }
 
+    @PostMapping("/createOrder")
+    public ResultDTO<OrderVO> createOrder(HttpServletRequest httpServletRequest) {
+        OrderVO orderVO = orderService.createOrder(CookieUtils.getOneSessionKey(httpServletRequest));
+        return ResultDTOUtils.success(orderVO);
+    }
+
     @PostMapping("/insertBatch")
     public ResultDTO<List<Order>> insert(@RequestBody List<Order> list) {
         orderService.insertBatch(list);

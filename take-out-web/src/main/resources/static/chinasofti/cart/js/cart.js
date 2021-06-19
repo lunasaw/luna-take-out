@@ -3,7 +3,7 @@ var cartPageIndex = 0;
 var cartAllPage = 0;
 $(document).ready(function () {
 
-    getMealCratList(cartAllPage, everyPageDataCount, true, "cart/api/pageListByEntity");
+    getMealCartList(cartAllPage, everyPageDataCount, true, "cart/api/pageListByEntity");
 });
 
 function checkResultAndGetData($result) {
@@ -13,7 +13,7 @@ function checkResultAndGetData($result) {
     return $result.data;
 }
 
-function getMealCratList(pageStart, pageSize, SynOrAsyn, url) {
+function getMealCartList(pageStart, pageSize, SynOrAsyn, url) {
     $.ajax({
         url: url + "/" + pageStart + "/" + pageSize, // url where to submit the request
         type: "GET", // type of action POST || GET
@@ -102,7 +102,7 @@ function DELETE_CART(cartId) {
                 return;
             }
             $.MsgBox.Alert("消息", "删除成功");
-            getMealCratList(cartPageIndex, everyPageDataCount, true, "cart/api/pageListByEntity");
+            getMealCartList(cartPageIndex, everyPageDataCount, true, "cart/api/pageListByEntity");
         }
     });
 }
@@ -125,17 +125,18 @@ function ADD_CARTS() {
                 return;
             }
             $.MsgBox.Alert("消息", "订单已生成");
+            getMealCartList(cartPageIndex, everyPageDataCount, true, "cart/api/pageListByEntity");
         }
     });
 }
 
 function GOTO_CART_NEXT_PAGE() {
     cartPageIndex = cartPageIndex + 1;
-    getMealCratList(cartPageIndex, everyPageDataCount, true, "cart/api/pageListByEntity");
+    getMealCartList(cartPageIndex, everyPageDataCount, true, "cart/api/pageListByEntity");
 }
 
 function GOTO_CART_TAIL_PAGE() {
-    getMealCratList(cartAllPage, everyPageDataCount, true, "cart/api/pageListByEntity");
+    getMealCartList(cartAllPage, everyPageDataCount, true, "cart/api/pageListByEntity");
 }
 
 function GOTO_CART_PAGE() {
@@ -157,23 +158,23 @@ function GOTO_CART_PAGE() {
         return;
     }
 
-    getMealCratList(jumpVal, everyPageDataCount, true, "cart/api/pageListByEntity");
+    getMealCartList(jumpVal, everyPageDataCount, true, "cart/api/pageListByEntity");
 
 }
 
 
 function GOTO_CART_HOME_PAGE() {
 
-    getMealCratList(0, everyPageDataCount, true, "cart/api/pageListByEntity");
+    getMealCartList(0, everyPageDataCount, true, "cart/api/pageListByEntity");
 }
 
 function GOTO_CART_PREVIOUS_PAGE() {
     cartPageIndex = cartPageIndex - 1;
-    getMealCratList(cartPageIndex, everyPageDataCount, true, "cart/api/pageListByEntity");
+    getMealCartList(cartPageIndex, everyPageDataCount, true, "cart/api/pageListByEntity");
 }
 
 function searchByOrderOid() {
-    getMealCratList(0, everyPageDataCount, true, "cart/api/pageListByEntity");
+    getMealCartList(0, everyPageDataCount, true, "cart/api/pageListByEntity");
 }
 
 

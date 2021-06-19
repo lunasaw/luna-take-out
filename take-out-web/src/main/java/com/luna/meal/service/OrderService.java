@@ -76,6 +76,14 @@ public interface OrderService {
     List<Order> listByIds(List<Long> ids);
 
     /**
+     * 购物车生成订单
+     * 
+     * @param oneSessionKey
+     * @return
+     */
+    OrderVO createOrder(String oneSessionKey);
+
+    /**
      * 插入
      *
      * @param order 对象
