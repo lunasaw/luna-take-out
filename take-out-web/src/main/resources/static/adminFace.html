@@ -1,175 +1,197 @@
-
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<base href="<%=basePath%>">
+	<base href="<%=basePath%>">
 
-<title>管理员登录</title>
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">
-<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-<meta http-equiv="description" content="This is my page">
-
-
-
-<link rel="stylesheet" type="text/css" href="static/comp/face/css/style.css" />
-<link rel="stylesheet" href="static/css/default/mask.css" />
-<script type="text/javascript" src="static/comp/face/js/jquery-1.4.4.min.js"></script>
-<style>
-body {
-	height: 100%;
-	background: #213838;
-	overflow: hidden;
-}
-
-canvas {
-	z-index: -1;
-	position: absolute;
-}
-</style>
+	<title>管理员登录</title>
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
 
 
-<script src="static/comp/face/js/jquery.js"></script>
-<script src="static/comp/face/js/verificationNumbers.js"></script>
-<script src="static/comp/face/js/Particleground.js"></script>
-<script src="static/js/common/mask.js"></script>
-<script>
-$(document).ready(function() {
-  //粒子背景特效
-  $('body').particleground({
-    dotColor: '#5cbdaa',
-    lineColor: '#5cbdaa'
-  });
-  //验证码
-  createCode();
-  //测试提交，对接程序删除即可
-  //$(".submit_btn").click(function(){
-	 // localhost.href="index.jsp";
-	  //});
-});
-</script>
+	<link rel="stylesheet" type="text/css" href="static/comp/face/css/style.css"/>
+	<link rel="stylesheet" href="static/css/default/mask.css"/>
+	<script type="text/javascript" src="static/comp/face/js/jquery-1.4.4.min.js"></script>
+	<style>
+		body {
+			height: 100%;
+			background: #213838;
+			overflow: hidden;
+		}
+
+		canvas {
+			z-index: -1;
+			position: absolute;
+		}
+	</style>
 
 
-<style type="text/css">
-* {
-	margin: 0;
-	padding: 0;
-}
+	<script src="static/comp/face/js/jquery.js"></script>
+	<script src="static/comp/face/js/verificationNumbers.js"></script>
+	<script src="static/comp/face/js/Particleground.js"></script>
+	<script src="static/js/common/mask.js"></script>
+	<script>
+		$(document).ready(function () {
+			//粒子背景特效
+			$('body').particleground({
+				dotColor: '#5cbdaa',
+				lineColor: '#5cbdaa'
+			});
+			//验证码
+			createCode();
+			//测试提交，对接程序删除即可
+			//$(".submit_btn").click(function(){
+			// localhost.href="index.jsp";
+			//});
+		});
+	</script>
 
-body {
-	height: 100vh;
-	background-position: center;
-	overflow: hidden;
-}
 
-h1 {
-	color: #fff;
-	text-align: center;
-	font-weight: 100;
-	margin-top: 40px;
-}
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
 
-#media {
-	width: 100%;
-	height: 250px;
-	margin: 10px auto 0;
-	border-radius: 30px;
-	overflow: hidden;
-	opacity: 0.7px;
-}
+		body {
+			height: 100vh;
+			background-position: center;
+			overflow: hidden;
+		}
 
-#video {
-	
-}
+		h1 {
+			color: #fff;
+			text-align: center;
+			font-weight: 100;
+			margin-top: 40px;
+		}
 
-#canvas {
-	display: none;
-}
+		#media {
+			width: 100%;
+			height: 250px;
+			margin: 10px auto 0;
+			border-radius: 30px;
+			overflow: hidden;
+			opacity: 0.7px;
+		}
 
-#btn {
-	width: 160px;
-	height: 50px;
-	background: #03a9f4;
-	margin: 70px auto 0;
-	text-align: center;
-	line-height: 50px;
-	color: #fff;
-	border-radius: 40px;
-}
-</style>
+		#video {
+
+		}
+
+		#canvas {
+			display: none;
+		}
+
+		#btn {
+			width: 160px;
+			height: 50px;
+			background: #03a9f4;
+			margin: 70px auto 0;
+			text-align: center;
+			line-height: 50px;
+			color: #fff;
+			border-radius: 40px;
+		}
+	</style>
 </head>
 
 <body>
 
 
-		<dl class="admin_login">
-			<dt>
-				<strong>CSI餐厅小筑外卖网</strong><em></em> <strong>请把你的脸放摄像头面前</strong>
-			</dt>
-			<div id="media">
-				<video id="video" width="100%" height="300" autoplay></video>
-				<canvas id="canvas" width="530" height="300"></canvas>
-			</div>
-			<dd>
-				<input type="button" onclick="query()" value="立即登录"
-					class="submit_btn" />
-			</dd>
+	<dl class="admin_login">
+		<dt>
+			<strong>CSI餐厅小筑外卖网</strong><em></em> <strong>请把你的脸放摄像头面前</strong>
+		</dt>
+		<div id="media">
+			<video id="video" width="100%" height="300" autoplay></video>
+			<canvas id="canvas" width="530" height="300"></canvas>
+		</div>
+		<dd>
+			<input type="button" onclick="query()" value="立即登录"
+			       class="submit_btn"/>
+		</dd>
 
-		</dl>
-		<script type="text/javascript" src="static/js/alert.js"></script>
-		<script type="text/javascript">
-  		//var 是定义变量
-  		var video = document.getElementById("video"); //获取video标签
-  		var context = canvas.getContext("2d");
-  		var con  ={
-  			audio:false,
-  			video:true,
-  			video:{
-  			width:1980,
-  			height:1024,
-  			
-  			}
-  		};	
-  		
-  		//导航 获取用户媒体对象
-  			navigator.mediaDevices.getUserMedia(con)
-  			.then(function(stream){
-  				try{
-  					video.src = window.URL.createObjectURL(stream);
-  				}catch(e){
-  					video.srcObject=stream;
-  				}
-  				
-  				video.onloadmetadate = function(e){
-  					video.play();
-  				
-  				}
-  			});
-  	
-  			
-  			
-  	
-  			function query(){
-  				
-  				//把流媒体数据画到convas画布上去
-  				context.drawImage(video,0,0,530,300);
-  				var base = getBase64();
-  
-  				window.parent.location.replace("main.html?menuUserName='wangxh'&admin=0");
-			
-				
-				//window.parent.location.replace("../main.html");
+	</dl>
+	<script type="text/javascript" src="static/js/alert.js"></script>
+	<script type="text/javascript">
+		//var 是定义变量
+		var video = document.getElementById("video"); //获取video标签
+		var context = canvas.getContext("2d");
+		var con = {
+			audio: false,
+			video: true,
+			video: {
+				width: 1980,
+				height: 1024,
+
 			}
-			function getBase64() {
-				var imgSrc = document.getElementById("canvas").toDataURL(
-						"image/png");
-				
-				return imgSrc.split("base64,")[1];
+		};
 
-			};
-		</script>
+		//导航 获取用户媒体对象
+		navigator.mediaDevices.getUserMedia(con)
+			.then(function (stream) {
+				try {
+					video.src = window.URL.createObjectURL(stream);
+				} catch (e) {
+					video.srcObject = stream;
+				}
+
+				video.onloadmetadate = function (e) {
+					video.play();
+
+				}
+			});
+
+
+		function query() {
+			//把流媒体数据画到convas画布上去
+			context.drawImage(video, 0, 0, 530, 300);
+			let base = getBase64();
+			$.ajax({
+				type: "POST",
+				url: "/meal/user/api/faceLogin",
+				data: {"faceBase64": base},
+				dataType: "json",
+				success: function (result) {
+					console.log(result);
+					let data;
+					try {
+						data = checkResultAndGetData(result);
+					} catch (error) {
+						$.MsgBox.Alert("消息", "出错了，请于管理员联系");
+						return;
+					}
+					console.log(data);
+					if (data == null) {
+						return;
+					}
+					let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+					parent.layer.close(index); //再执行关闭
+
+
+					window.parent.location.replace("main.html?menuUserName=" + data.username.trim() + "&admin=" + data.admin);
+				}
+			});
+		}
+
+		function checkResultAndGetData($result) {
+			if ($result.success == false) {
+				throw $result;
+			}
+			return $result.data;
+		}
+
+		function getBase64() {
+			var imgSrc = document.getElementById("canvas").toDataURL(
+				"image/png");
+
+			return imgSrc.split("base64,")[1];
+
+		};
+	</script>
 
 </body>
 </html>
