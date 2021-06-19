@@ -87,6 +87,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public PageInfo<OrderVO> myListPageByEntity(String oneSessionKey, int page, int size, Order order) {
+        User user = userTools.getUser(oneSessionKey);
+        order.setUserId(user.getId());
+        return listPageByEntity(page, size, order);
+    }
+
+    @Override
     public PageInfo<Order> listPage(int page, int pageSize) {
         PageHelper.startPage(page, pageSize);
         List<Order> list = orderMapper.listByEntity(new Order());
@@ -111,11 +118,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int update(String oneSessionKey, Order order) {
         User doUser = userTools.getUser(oneSessionKey);
-        if (!Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
+        Order byId = orderMapper.getById(order.getId());
+        if (!Objects.equals(doUser.getId(), byId.getUserId())
+            && !Objects.equals(UserConstant.ADMIN, doUser.getAdmin())) {
             throw new UserException(ResultCode.PARAMETER_INVALID, "鉴权异常");
         }
 
-        Order byId = orderMapper.getById(order.getId());
         byId.setOrderState(order.getOrderState());
         return orderMapper.update(byId);
     }

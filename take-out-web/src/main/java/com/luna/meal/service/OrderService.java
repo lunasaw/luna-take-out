@@ -49,8 +49,19 @@ public interface OrderService {
 
     /**
      * 条件分页查询
+     * 
+     * @param oneSessionKey
+     * @param page 起始标号
+     * @param size 查询条目
+     * @param order 查询条件
+     * @return 对象列表
+     */
+    PageInfo<OrderVO> myListPageByEntity(String oneSessionKey, int page, int size, Order order);
+
+    /**
+     * 条件分页查询
      *
-     * @param page     起始标号
+     * @param page 起始标号
      * @param pageSize 查询条目
      * @return 对象列表
      */
@@ -136,4 +147,5 @@ public interface OrderService {
      * @return 影响行数
      */
     int countByEntity(Order order);
+
 }
