@@ -24,7 +24,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.luna.post" additivity="false" level="INFO">
+    <logger name="com.luna.meal" additivity="false" level="INFO">
         <appender-ref ref="postLog"/>
     </logger>
 
