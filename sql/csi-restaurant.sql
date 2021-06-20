@@ -11,7 +11,7 @@
  Target Server Version : 50734
  File Encoding         : 65001
 
- Date: 19/06/2021 20:59:23
+ Date: 20/06/2021 11:42:26
 */
 
 SET NAMES utf8mb4;
@@ -53,7 +53,7 @@ CREATE TABLE `tb_cart` (
   `modified_time` datetime NOT NULL COMMENT '修改时间',
   `version` int(11) unsigned NOT NULL COMMENT '锁',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='商品购物车';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品购物车';
 
 -- ----------------------------
 -- Records of tb_cart
@@ -84,10 +84,6 @@ CREATE TABLE `tb_meal` (
 -- Records of tb_meal
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_meal` VALUES (1, 1, '锅塌豆腐', '塌豆腐玲珑别致，整齐端庄。', '最早的锅塌系列菜是来自山东地区，早在明代山东济南就出现了锅塌豆腐，此菜到了清乾隆年间荣升宫廷菜。后传遍山东各地，又传入到天津、北京及上海等地。\n', 15.00, 'http://127.0.0.1:8081/Users/luna/Document/project/meal/2021/06/18/3dad85a5e6d64436b1e0e5aba6093645.jpg', '2021-06-18 19:07:42', '2021-06-18 22:54:45', 2);
-INSERT INTO `tb_meal` VALUES (2, 2, '回锅肉', '口味独特，色泽红亮，肥而不腻	', '回锅肉是一种四川传统菜式，属于川菜系列。制作原料主要有猪肉、青椒、蒜苗等，口味独特，色泽红亮，肥而不腻。\n', 25.00, 'http://127.0.0.1:8081/Users/luna/Document/project/meal/2021/06/18/4a5e38b227c84d228962ea0193183f9e.jpg', '2021-06-18 19:08:45', '2021-06-18 22:53:39', 3);
-INSERT INTO `tb_meal` VALUES (3, 4, '青椒炒鸡蛋', '青椒炒鸡蛋', '青椒炒鸡蛋', 12.00, 'http://127.0.0.1:8081/Users/luna/Document/project/meal/2021/06/19/4038607a2eed4e2989f2510c7d506a1b.jpg', '2021-06-18 21:15:57', '2021-06-19 16:18:42', 1);
-INSERT INTO `tb_meal` VALUES (5, 2, '酸菜鱼', '酸菜鱼', '酸菜鱼', 27.00, 'http://127.0.0.1:8081/Users/luna/Document/project/meal/2021/06/19/9785ee2fd07d4774950aa920c15ac202.jpg', '2021-06-18 21:18:01', '2021-06-19 16:20:19', 6);
 COMMIT;
 
 -- ----------------------------
@@ -108,18 +104,6 @@ CREATE TABLE `tb_meal_series` (
 -- Records of tb_meal_series
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_meal_series` VALUES (1, 1, '鲁菜', '2021-06-17 17:36:48', '2021-06-18 14:59:47', 2);
-INSERT INTO `tb_meal_series` VALUES (2, 2, '川菜', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (3, 3, '粤菜', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (4, 4, '苏菜', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (5, 5, '闽菜', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (6, 6, '浙菜', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (7, 7, '湘菜', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (8, 8, '徽菜', '2021-06-17 17:36:48', '2021-06-18 14:43:48', 2);
-INSERT INTO `tb_meal_series` VALUES (9, 9, '西餐', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (10, 10, '西点', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
-INSERT INTO `tb_meal_series` VALUES (11, 13, '药膳', '2021-06-17 17:36:48', '2021-06-18 14:59:55', 1);
-INSERT INTO `tb_meal_series` VALUES (12, 12, '私房菜', '2021-06-17 17:36:48', '2021-06-17 17:36:48', 0);
 COMMIT;
 
 -- ----------------------------
@@ -143,8 +127,6 @@ CREATE TABLE `tb_order` (
 -- Records of tb_order
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_order` VALUES (1, 8, '2021-06-19 09:41:26', 3, 30.00, '2021-06-19 09:41:38', '2021-06-19 16:16:17', 9);
-INSERT INTO `tb_order` VALUES (16, 8, '2021-06-19 20:58:36', 3, 15.00, '2021-06-19 20:58:36', '2021-06-19 20:58:40', 2);
 COMMIT;
 
 -- ----------------------------
@@ -169,16 +151,6 @@ CREATE TABLE `tb_order_meal` (
 -- Records of tb_order_meal
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_order_meal` VALUES (1, 1, 1, 30.00, 2, '2021-06-19 10:33:40', '2021-06-19 10:33:42', 0);
-INSERT INTO `tb_order_meal` VALUES (31, 12, 1, 15.00, 1, '2021-06-19 18:06:50', '2021-06-19 18:06:50', 0);
-INSERT INTO `tb_order_meal` VALUES (32, 12, 1, 75.00, 5, '2021-06-19 18:06:50', '2021-06-19 18:06:50', 0);
-INSERT INTO `tb_order_meal` VALUES (33, 12, 2, 25.00, 1, '2021-06-19 18:06:50', '2021-06-19 18:06:50', 0);
-INSERT INTO `tb_order_meal` VALUES (34, 13, 2, 25.00, 1, '2021-06-19 18:07:51', '2021-06-19 18:07:51', 0);
-INSERT INTO `tb_order_meal` VALUES (35, 13, 3, 12.00, 1, '2021-06-19 18:07:51', '2021-06-19 18:07:51', 0);
-INSERT INTO `tb_order_meal` VALUES (36, 14, 3, 12.00, 1, '2021-06-19 18:55:57', '2021-06-19 18:55:57', 0);
-INSERT INTO `tb_order_meal` VALUES (37, 15, 2, 25.00, 1, '2021-06-19 18:56:32', '2021-06-19 18:56:32', 0);
-INSERT INTO `tb_order_meal` VALUES (38, 15, 1, 15.00, 1, '2021-06-19 18:56:34', '2021-06-19 18:56:34', 0);
-INSERT INTO `tb_order_meal` VALUES (39, 16, 1, 15.00, 1, '2021-06-19 20:58:36', '2021-06-19 20:58:36', 0);
 COMMIT;
 
 -- ----------------------------
@@ -206,14 +178,6 @@ CREATE TABLE `tb_user` (
 -- Records of tb_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `tb_user` VALUES (1, 'luna', 'f1a9c4b4feab871cc6a93165eca2e655', '陈章月', 'luna_nov@163.com', '15696756582', '江苏省南通市如皋市万寿南路766号', 'http://127.0.0.1:8081/Users/luna/Document/project/meal/2021/06/19/c4ca4238a0b923820dcc509a6f75849b.jpg', 'ed09aa1bfcfb61fdf5639a2252093233', '2021-06-18 10:33:30', '2021-06-19 20:46:34', 27, '0');
-INSERT INTO `tb_user` VALUES (2, 'chenzhnagyue', 'f1a9c4b4feab871cc6a93165eca2e655', '陈章月', 'luna_nov@163.com', '15696756582', '江苏省南通市如皋市万寿南路766号', NULL, NULL, '2021-06-18 10:49:45', '2021-06-18 12:44:19', 1, '1');
-INSERT INTO `tb_user` VALUES (3, 'luojie', 'f1a9c4b4feab871cc6a93165eca2e655', '罗杰', 'luojie@163.com', '15696756583', '江苏省南通市如皋市万寿南路766号', NULL, NULL, '2021-06-18 12:56:31', '2021-06-18 12:57:43', 1, '1');
-INSERT INTO `tb_user` VALUES (4, 'zhaowenjun', 'f1a9c4b4feab871cc6a93165eca2e655', '赵文军', 'wenjun@163.com', '15696756583', '江苏省南通市如皋市万寿南路766号', NULL, NULL, '2021-06-18 12:56:31', '2021-06-18 12:57:43', 1, '1');
-INSERT INTO `tb_user` VALUES (5, 'hanzhiqiang', 'f1a9c4b4feab871cc6a93165eca2e655', '韩志强', 'zhiqiang@163.com', '15696756583', '江苏省南通市如皋市万寿南路766号', NULL, NULL, '2021-06-18 12:56:31', '2021-06-18 12:57:43', 1, '1');
-INSERT INTO `tb_user` VALUES (6, 'yanghao', 'f1a9c4b4feab871cc6a93165eca2e655', '杨昊', 'yanghao@163.com', '15696756583', '江苏省南通市如皋市万寿南路766号', NULL, NULL, '2021-06-18 12:56:31', '2021-06-18 12:57:43', 1, '1');
-INSERT INTO `tb_user` VALUES (7, 'wanghuaqiang', 'f1a9c4b4feab871cc6a93165eca2e655', '王华强', 'huaqiang@163.com', '15696756583', '江苏省南通市如皋市万寿南路766号', NULL, NULL, '2021-06-18 12:56:31', '2021-06-18 12:57:43', 1, '1');
-INSERT INTO `tb_user` VALUES (8, 'luna2', 'f1a9c4b4feab871cc6a93165eca2e655', '陈章月', 'luna_nov@163.com', '15696756584', '江苏省南通市如皋市万寿南路766号', 'http://127.0.0.1:8081/Users/luna/Document/project/meal/2021/06/19/c9f0f895fb98ab9159f51fd0297e236d.jpg', '384c15c1453caa4c73f6ba1719ef98fd', '2021-06-18 10:33:30', '2021-06-19 20:46:10', 31, '1');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
