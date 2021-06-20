@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -111,13 +112,15 @@ public class FaceService {
     /**
      * 人脸检查
      * 
-     * @param base64
-     * @param site
+     * @param base64 人脸信息
+     * @param site 登陆站点
      * @return
      */
     public UserVO login(String base64, String site) {
+        log.info("face login site={}", site);
+
         UserInfoListDTO userInfoListDTO =
-            BaiduUserFaceApi.userFaceSearch(baiduProperties.getBaiduKey(), base64, "BASE64", LUNA_MEAL);
+            BaiduUserFaceApi.userFaceSearchWithBase64(baiduProperties.getBaiduKey(), base64, 5, LUNA_MEAL);
 
         if (userInfoListDTO == null) {
             throw new UserException(ResultCode.PARAMETER_INVALID, "光线遮挡，请选择合适地点重试！");
@@ -126,18 +129,19 @@ public class FaceService {
         List<UserInfoResultDTO> userList = userInfoListDTO.getUserList();
         String nonceStrWithUUID = RandomStrUtil.generateNonceStrWithUUID();
 
+        // 存在对应站点，并且分数满足阀值
         List<UserInfoResultDTO> collect = userList.stream()
-            .filter(userInfoResultDTO -> userInfoResultDTO.getScore() > SCORE).collect(Collectors.toList());
+            .filter(userInfoResultDTO -> {
+                long l = Long.parseLong(userInfoResultDTO.getUserId());
+                User temp = userMapper.getById(l);
+                return Objects.equals(temp.getAdmin(), site);
+            }).filter(userInfoResultDTO -> userInfoResultDTO.getScore() > SCORE).collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(collect)) {
-            throw new UserException(ResultCode.PARAMETER_INVALID, "光线遮挡，请选择合适地点重试！");
+            throw new UserException(ResultCode.PARAMETER_INVALID, "光线遮挡，未检测到人脸，请选择合适地点重试！");
         }
 
-        Optional<UserInfoResultDTO> first = collect.stream().filter(userInfoResultDTO -> {
-            long l = Long.parseLong(userInfoResultDTO.getUserId());
-            User temp = userMapper.getById(l);
-            return Objects.equals(temp.getAdmin(), site);
-        }).findFirst();
+        Optional<UserInfoResultDTO> first = collect.stream().findFirst();
 
         if (!first.isPresent()) {
             throw new UserException(ResultCode.PARAMETER_INVALID, "该角色权限未注册人脸，请登陆后注册人脸后重试");

@@ -9,6 +9,10 @@ $(function () {
     }
 });
 
+function goAdmin() {
+    window.location.replace("adminLogin.html");
+}
+
 function subLogin() {
     let $msg = $("#message"), $usrname = $("#loginName"), $pwd = $("#loginPwd"), $rememberPwd = $("#rememberPwd");
     let usrname = $usrname.val() || "";

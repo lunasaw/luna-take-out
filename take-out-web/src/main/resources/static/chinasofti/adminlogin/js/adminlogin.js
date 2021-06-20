@@ -9,6 +9,9 @@ $(function () {
     }
 
 });
+function goUser() {
+    window.location.replace("userLogin.html");
+}
 
 function subLogin() {
     var $msg = $("#message"), $usrname = $("#loginName"), $pwd = $("#loginPwd"), $rememberPwd = $("#rememberPwd");

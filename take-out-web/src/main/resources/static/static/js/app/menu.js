@@ -623,9 +623,9 @@ function GetQueryString(name) {
 function loginOut() {
 
     if (admin.trim() == "0") {
-        window.location.replace("adminlogin.html");
+        window.location.replace("adminLogin.html");
     } else {
-        window.location.replace("userlogin.html");
+        window.location.replace("userLogin.html");
     }
 
 

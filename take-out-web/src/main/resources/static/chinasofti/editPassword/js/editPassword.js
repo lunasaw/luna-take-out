@@ -27,7 +27,7 @@ function adminSubPassword() {
         newPassword: newPassword,
         oldPassword: oldPassword
     }
-    editPassword("adminlogin.html", password);
+    editPassword("adminLogin.html", password);
 }
 
 function userSubPassword() {
@@ -60,7 +60,7 @@ function userSubPassword() {
         newPassword: newPassword,
         oldPassword: oldPassword
     }
-    editPassword("userlogin.html", password);
+    editPassword("userLogin.html", password);
 
 
 }

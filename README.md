@@ -2,6 +2,8 @@
 
 luna-take-out 餐厅小筑外卖网
 
+课程设计-外卖点餐系统，包括商家和客户单点系统，人脸识别登陆，地图展示
+
 # Contributor
 
 - [luna](https://github.com/lunasaw)
